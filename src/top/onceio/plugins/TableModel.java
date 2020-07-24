@@ -4,7 +4,7 @@ package top.onceio.plugins;
 import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiType;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,27 +51,35 @@ public class TableModel {
 
     public static TableModel parse(PsiClass psiClass) {
         PsiAnnotation tbl = psiClass.getAnnotation("top.onceio.core.db.annotation.Tbl");
-        if(tbl == null) {
+        PsiAnnotation tblView = psiClass.getAnnotation("top.onceio.core.db.annotation.TblView");
+        String table;
+        String schema;
+        if (tbl != null) {
+            table = tbl.findAttributeValue("name").getText().replace("\"", "");
+            schema = tbl.findAttributeValue("schema").getText().replace("\"", "");
+        } else if (tblView != null) {
+            table = tblView.findAttributeValue("name").getText().replace("\"", "");
+            schema = tblView.findAttributeValue("schema").getText().replace("\"", "");
+        } else {
             return null;
         }
-        String table = tbl.findAttributeValue("name").getText().replace("\"","");
-        String schema = tbl.findAttributeValue("schema").getText().replace("\"","");
         if ("".equals(table)) {
-            table = psiClass.getName();
+            table = psiClass.getName().replaceAll("([A-Z])", "_$1").replaceFirst("_", "").toLowerCase();
         }
         TableModel model = new TableModel(psiClass.getName(), psiClass.getSuperClass().getName(), schema + "." + table);
         for (PsiField psiField : psiClass.getFields()) {
             PsiAnnotation col = psiField.getAnnotation("top.onceio.core.db.annotation.Col");
-            if(col == null) continue;
+            if (col == null) continue;
 
             String modelType = "Base";
-            if (psiField.getType().equals(PsiType.CHAR)) {
+            if (psiField.getType().getCanonicalText().equals("java.lang.String")) {
                 modelType = "String";
             }
             String fieldName = psiField.getName();
-            String colName = col.findAttributeValue("name").getText().replace("\"","");
+            String colName = col.findAttributeValue("name").getText().replace("\"", "");
             if (colName.equals("")) {
-                colName = fieldName;
+                colName = fieldName.replaceAll("([A-Z])", "_$1").replaceFirst("_", "").toLowerCase();
+                ;
             }
             model.appendField(modelType, fieldName, colName);
         }
