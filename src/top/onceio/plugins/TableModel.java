@@ -13,16 +13,13 @@ public class TableModel {
     private static final String TPL =
             "\n    public static class Meta extends %s.Meta<Meta>  {\n" +
                     "%s\n" +
-                    "        public Meta(String alias) {\n" +
-                    "            super(\"%s\", alias);\n" +
+                    "        public Meta() {\n" +
+                    "            super(\"%s\");\n" +
                     "            super.bind(this, %s.class);\n" +
                     "        }\n" +
-                    "        public static Meta meta() {\n" +
-                    "            return new Meta(\"t\");\n" +
-                    "        }\n" +
-                    "        public static Meta meta(String alias) {\n" +
-                    "            return new Meta(alias);\n" +
-                    "        }\n" +
+                    "    }\n" +
+                    "    public static Meta meta() {\n" +
+                    "        return new Meta();\n" +
                     "    }\n";
 
     private static final String TPL_FIELD =
