@@ -51,15 +51,11 @@ public class TableModel {
 
     public static TableModel parse(PsiClass psiClass) {
         PsiAnnotation tbl = psiClass.getAnnotation("top.onceio.core.db.annotation.Tbl");
-        PsiAnnotation tblView = psiClass.getAnnotation("top.onceio.core.db.annotation.TblView");
         String table;
         String schema;
         if (tbl != null) {
             table = tbl.findAttributeValue("name").getText().replace("\"", "");
             schema = tbl.findAttributeValue("schema").getText().replace("\"", "");
-        } else if (tblView != null) {
-            table = tblView.findAttributeValue("name").getText().replace("\"", "");
-            schema = tblView.findAttributeValue("schema").getText().replace("\"", "");
         } else {
             return null;
         }
