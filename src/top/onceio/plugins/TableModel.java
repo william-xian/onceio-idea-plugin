@@ -60,7 +60,7 @@ public class TableModel {
             return null;
         }
         if ("".equals(table)) {
-            table = psiClass.getName().replaceAll("([A-Z])", "_$1");
+            table = psiClass.getName().replaceAll("([A-Z])", "_$1").toLowerCase();
             if (table.startsWith("_")) {
                 table = table.substring(1);
             }
