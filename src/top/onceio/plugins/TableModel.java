@@ -39,8 +39,8 @@ public class TableModel {
         this.tableName = tableName;
     }
 
-    public void appendField(String modelType, String fieldName, String colName) {
-        fields.add(String.format(TPL_FIELD, modelType, fieldName, modelType, className, colName));
+    public void appendField(String modelType, String fieldName) {
+        fields.add(String.format(TPL_FIELD, modelType, fieldName, modelType, className, fieldName));
     }
 
     @Override
@@ -69,17 +69,12 @@ public class TableModel {
         for (PsiField psiField : psiClass.getFields()) {
             PsiAnnotation col = psiField.getAnnotation("top.onceio.core.db.annotation.Col");
             if (col == null) continue;
-
             String modelType = "Base";
             if (psiField.getType().getCanonicalText().equals("java.lang.String")) {
                 modelType = "String";
             }
             String fieldName = psiField.getName();
-            String colName = col.findAttributeValue("name").getText().replace("\"", "");
-            if (colName.equals("")) {
-                colName = fieldName.replaceAll("([A-Z])", "_$1").toLowerCase();
-            }
-            model.appendField(modelType, fieldName, colName);
+            model.appendField(modelType, fieldName);
         }
         return model;
     }
