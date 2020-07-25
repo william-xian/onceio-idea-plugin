@@ -60,7 +60,10 @@ public class TableModel {
             return null;
         }
         if ("".equals(table)) {
-            table = psiClass.getName().replaceAll("([A-Z])", "_$1").replaceFirst("_", "").toLowerCase();
+            table = psiClass.getName().replaceAll("([A-Z])", "_$1");
+            if (table.startsWith("_")) {
+                table = table.substring(1);
+            }
         }
         TableModel model = new TableModel(psiClass.getName(), psiClass.getSuperClass().getName(), schema + "." + table);
         for (PsiField psiField : psiClass.getFields()) {
@@ -74,8 +77,7 @@ public class TableModel {
             String fieldName = psiField.getName();
             String colName = col.findAttributeValue("name").getText().replace("\"", "");
             if (colName.equals("")) {
-                colName = fieldName.replaceAll("([A-Z])", "_$1").replaceFirst("_", "").toLowerCase();
-                ;
+                colName = fieldName.replaceAll("([A-Z])", "_$1").toLowerCase();
             }
             model.appendField(modelType, fieldName, colName);
         }
