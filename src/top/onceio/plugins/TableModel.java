@@ -52,10 +52,8 @@ public class TableModel {
     public static TableModel parse(PsiClass psiClass) {
         PsiAnnotation tbl = psiClass.getAnnotation("top.onceio.core.db.annotation.Tbl");
         String table;
-        String schema;
         if (tbl != null) {
-            table = tbl.findAttributeValue("name").getText().replace("\"", "");
-            schema = tbl.findAttributeValue("schema").getText().replace("\"", "");
+            table = tbl.findAttributeValue("name").getText().replace("\"", "").toLowerCase().replace("public.","");
         } else {
             return null;
         }
@@ -65,7 +63,7 @@ public class TableModel {
                 table = table.substring(1);
             }
         }
-        TableModel model = new TableModel(psiClass.getName(), psiClass.getSuperClass().getName(), schema + "." + table);
+        TableModel model = new TableModel(psiClass.getName(), psiClass.getSuperClass().getName(), table);
         for (PsiField psiField : psiClass.getFields()) {
             PsiAnnotation col = psiField.getAnnotation("top.onceio.core.db.annotation.Col");
             if (col == null) continue;
