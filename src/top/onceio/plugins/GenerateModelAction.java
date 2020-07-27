@@ -4,6 +4,7 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
+import com.intellij.openapi.application.WriteAction;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -49,7 +50,7 @@ public class GenerateModelAction extends AnAction {
         text.insert(metaIndex, model.toString());
         int endO = importList.getTextRange().getEndOffset();
         text.insert(endO, TableModel.IMPORTS);
-        editor.getDocument().setText(text);
+        doc.setText(text);
 
     }
 }
