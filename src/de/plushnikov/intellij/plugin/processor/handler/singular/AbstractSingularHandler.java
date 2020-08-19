@@ -17,7 +17,6 @@ import de.plushnikov.intellij.plugin.thirdparty.LombokUtils;
 import de.plushnikov.intellij.plugin.util.PsiAnnotationUtil;
 import de.plushnikov.intellij.plugin.util.PsiMethodUtil;
 import de.plushnikov.intellij.plugin.util.PsiTypeUtil;
-import lombok.core.handlers.Singulars;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -134,21 +133,11 @@ public abstract class AbstractSingularHandler implements BuilderElementHandler {
 
   public String createSingularName(@NotNull PsiAnnotation singularAnnotation, String psiFieldName) {
     String singularName = PsiAnnotationUtil.getStringAnnotationValue(singularAnnotation, "value");
-    if (StringUtil.isEmptyOrSpaces(singularName)) {
-      singularName = Singulars.autoSingularize(psiFieldName);
-      if (singularName == null) {
-        singularName = psiFieldName;
-      }
-    }
+
     return singularName;
   }
 
   public static boolean validateSingularName(PsiAnnotation singularAnnotation, String psiFieldName) {
-    String singularName = PsiAnnotationUtil.getStringAnnotationValue(singularAnnotation, "value");
-    if (StringUtil.isEmptyOrSpaces(singularName)) {
-      singularName = Singulars.autoSingularize(psiFieldName);
-      return singularName != null;
-    }
     return true;
   }
 

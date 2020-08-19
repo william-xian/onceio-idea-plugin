@@ -54,7 +54,7 @@
 
     <lang.psiAugmentProvider implementation="top.onceio.plugins.provider.OnceIOAugmentProvider"/>
     <implicitUsageProvider implementation="top.onceio.plugins.provider.OnceIOImplicitUsageProvider"/>
-    <projectConfigurable instance="de.plushnikov.intellij.plugin.settings.ProjectSettingsPage"/>
+
 
     <treeGenerator implementation="de.plushnikov.intellij.plugin.extension.LombokLightMethodTreeGenerator"/>
 
@@ -66,10 +66,6 @@
               language="Lombok.Config"
               fieldName="INSTANCE" extensions="config" fileNames="lombok.config"/>
 
-
-    <lang.syntaxHighlighterFactory language="Lombok.Config"
-                                   implementationClass="de.plushnikov.intellij.plugin.language.LombokConfigSyntaxHighlighterFactory"/>
-    <colorSettingsPage implementation="de.plushnikov.intellij.plugin.language.LombokConfigColorSettingsPage"/>
     <lang.commenter language="Lombok.Config"
                     implementationClass="de.plushnikov.intellij.plugin.language.LombokConfigCommentor"/>
 
