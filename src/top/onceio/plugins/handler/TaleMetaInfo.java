@@ -29,7 +29,7 @@ public class TaleMetaInfo {
     private String setterPrefix;
 
     private String builderChainResult = "this";
-
+    private PsiClass psiClass;
     private PsiClass builderClass;
     private PsiType builderClassType;
 
@@ -71,6 +71,10 @@ public class TaleMetaInfo {
         final AccessorsInfo accessorsInfo = AccessorsInfo.build(psiField);
         result.fieldInBuilderName = accessorsInfo.removePrefix(psiField.getName());
         return result;
+    }
+
+    public void setPsiClass(PsiClass psiClass) {
+        this.psiClass = psiClass;
     }
 
     private static boolean isDeprecated(@NotNull PsiField psiField) {
@@ -254,7 +258,7 @@ public class TaleMetaInfo {
         this.instanceVariableName = instanceVariableName;
     }
 
-     Collection<PsiField> renderBuilderFields(@NotNull TaleMetaInfo info) {
+    Collection<PsiField> renderBuilderFields(@NotNull TaleMetaInfo info) {
         final PsiType builderFieldType = getBuilderFieldType(info.getFieldType(), info.getProject());
         return Collections.singleton(
                 new LombokLightFieldBuilder(info.getManager(), info.getFieldName(), builderFieldType)
@@ -262,10 +266,15 @@ public class TaleMetaInfo {
                         .withModifier(PsiModifier.PUBLIC)
                         .withNavigationElement(info.getVariable()));
     }
+
     PsiType getBuilderFieldType(@NotNull PsiType psiFieldType, @NotNull Project project) {
         final PsiManager psiManager = PsiManager.getInstance(project);
-        final PsiType elementType = PsiTypeUtil.extractOneElementType(psiFieldType, psiManager);
-
-        return PsiTypeUtil.createCollectionType(psiManager, CommonClassNames.JAVA_UTIL_ARRAY_LIST, elementType);
+        PsiType co = PsiTypeUtil.createCollectionType(psiManager, psiClass.getQualifiedName());
+        if (PsiType.CHAR.isAssignableFrom(psiFieldType)) {
+            return PsiTypeUtil.createCollectionType(psiManager, "top.onceio.core.db.model.StringCol", co);
+        } else {
+            return PsiTypeUtil.createCollectionType(psiManager, "top.onceio.core.db.model.BaseCol", co);
+        }
     }
+
 }

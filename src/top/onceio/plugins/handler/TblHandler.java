@@ -3,6 +3,7 @@ package top.onceio.plugins.handler;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
+import com.intellij.psi.impl.light.LightTypeParameterBuilder;
 import de.plushnikov.intellij.plugin.problem.ProblemBuilder;
 import de.plushnikov.intellij.plugin.processor.clazz.ToStringProcessor;
 import de.plushnikov.intellij.plugin.processor.clazz.constructor.NoArgsConstructorProcessor;
@@ -11,6 +12,7 @@ import de.plushnikov.intellij.plugin.psi.LombokLightMethodBuilder;
 import de.plushnikov.intellij.plugin.util.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import top.onceio.plugins.processor.clazz.tbl.TblClassProcessor;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -36,12 +38,7 @@ public class TblHandler {
 
     private static final Collection<String> INVALID_ON_BUILDERS = Collections.unmodifiableSet(new HashSet<>());
 
-    private final ToStringProcessor toStringProcessor;
-    private final NoArgsConstructorProcessor noArgsConstructorProcessor;
-
-    public TblHandler(@NotNull ToStringProcessor toStringProcessor, @NotNull NoArgsConstructorProcessor noArgsConstructorProcessor) {
-        this.toStringProcessor = toStringProcessor;
-        this.noArgsConstructorProcessor = noArgsConstructorProcessor;
+    public TblHandler() {
     }
 
     PsiSubstitutor getBuilderSubstitutor(@NotNull PsiTypeParameterListOwner classOrMethodToBuild, @NotNull PsiClass innerClass) {
@@ -232,7 +229,8 @@ public class TblHandler {
     @NotNull
     String getBuilderClassName(@NotNull PsiClass psiClass, String returnTypeName) {
         final String builderClassNamePattern = "*Meta";
-        return replace(builderClassNamePattern, "*", capitalize(returnTypeName));
+        //return replace(builderClassNamePattern, "*", capitalize(returnTypeName));
+        return "Meta";
     }
 
     boolean hasMethod(@NotNull PsiClass psiClass, @NotNull String builderMethodName) {
@@ -280,8 +278,13 @@ public class TblHandler {
             result = Arrays.stream(psiClassMethod.getParameterList().getParameters()).map(TaleMetaInfo::fromPsiParameter);
         } else {
             result = PsiClassUtil.collectClassFieldsIntern(psiClass).stream().map(TaleMetaInfo::fromPsiField)
-                    .filter(TaleMetaInfo::useForBuilder);
+                    .filter(TaleMetaInfo::useForBuilder).filter((t) -> {
+                        t.setPsiClass(psiClass);
+                        return t.useForBuilder();
+                    });
+
         }
+
         return result;
     }
 
@@ -300,13 +303,66 @@ public class TblHandler {
     }
 
     @NotNull
+    public String getBuilderClassName(@NotNull PsiClass psiClass) {
+        return getBuilderClassName(psiClass, psiClass.getName());
+    }
+    private String selectNonClashingNameFor(String classGenericName, Collection<String> typeParamStrings) {
+        String result = classGenericName;
+        if (typeParamStrings.contains(classGenericName)) {
+            int counter = 2;
+            do {
+                result = classGenericName + counter++;
+            } while (typeParamStrings.contains(result));
+        }
+        return result;
+    }
+    @NotNull
     public PsiClass createBuilderClass(@NotNull PsiClass psiClass, @Nullable PsiMethod psiMethod, @NotNull PsiAnnotation psiAnnotation) {
+        String builderClassName = getBuilderClassName(psiClass);
+        String builderClassQualifiedName = psiClass.getQualifiedName() + "." + builderClassName;
+
+        final LombokLightClassBuilder baseClassBuilder = new LombokLightClassBuilder(psiClass, builderClassName, builderClassQualifiedName)
+                .withContainingClass(psiClass)
+                .withNavigationElement(psiAnnotation)
+                .withParameterTypes(psiClass.getTypeParameterList())
+                .withModifier(PsiModifier.PUBLIC)
+                .withModifier(PsiModifier.STATIC)
+                .withModifier(PsiModifier.ABSTRACT);
+
+        final List<String> typeParamNames = Stream.of(psiClass.getTypeParameters()).map(PsiTypeParameter::getName).collect(Collectors.toList());
+
+        final LightTypeParameterBuilder c = new LightTypeParameterBuilder(selectNonClashingNameFor("C", typeParamNames), baseClassBuilder, 0);
+        c.getExtendsList().addReference(PsiClassUtil.getTypeWithGenerics(psiClass));
+        baseClassBuilder.withParameterType(c);
+
+        final LightTypeParameterBuilder b = new LightTypeParameterBuilder(selectNonClashingNameFor("B", typeParamNames), baseClassBuilder, 1);
+        baseClassBuilder.withParameterType(b);
+        b.getExtendsList().addReference(PsiClassUtil.getTypeWithGenerics(baseClassBuilder));
+
+        final PsiElementFactory factory = JavaPsiFacade.getElementFactory(psiClass.getProject());
+        final PsiClassType bType = factory.createType(b);
+        final PsiClassType cType = factory.createType(c);
+
         LombokLightClassBuilder builderClass;
         if (null != psiMethod) {
             builderClass = createEmptyBuilderClass(psiClass, psiMethod, psiAnnotation);
         } else {
             builderClass = createEmptyBuilderClass(psiClass, psiAnnotation);
         }
+        final PsiClass superClass = psiClass.getSuperClass();
+        if (null != superClass && !"Object".equals(superClass.getName())) {
+            final PsiClass parentBuilderClass = superClass.findInnerClassByName(getBuilderClassName(superClass), false);
+            if (null != parentBuilderClass) {
+                final PsiType[] explicitTypes = Stream.concat(
+                        Stream.of(psiClass.getExtendsListTypes()).map(PsiClassType::getParameters).flatMap(Stream::of),
+                        Stream.of(cType, bType))
+                        .toArray(PsiType[]::new);
+
+                final PsiClassType extendsType = getTypeWithSpecificTypeParameters(parentBuilderClass, explicitTypes);
+                builderClass.withExtends(extendsType);
+            }
+        }
+
         builderClass.withMethods(createConstructors(builderClass, psiAnnotation));
 
         final List<TaleMetaInfo> taleMetaInfos = createTableMetaInfos(psiAnnotation, psiClass, psiMethod, builderClass);
@@ -319,6 +375,25 @@ public class TblHandler {
         return builderClass;
     }
 
+    @NotNull
+    private PsiClassType getTypeWithSpecificTypeParameters(@NotNull PsiClass psiClass, @NotNull PsiType... psiTypes) {
+        final PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(psiClass.getProject());
+        final PsiTypeParameter[] classTypeParameters = psiClass.getTypeParameters();
+        final int substituteTypesCount = psiTypes.length;
+        if (classTypeParameters.length >= substituteTypesCount) {
+            PsiSubstitutor newSubstitutor = PsiSubstitutor.EMPTY;
+
+            final int fromIndex = classTypeParameters.length - substituteTypesCount;
+            for (int i = 0; i < fromIndex; i++) {
+                newSubstitutor = newSubstitutor.put(classTypeParameters[i], elementFactory.createType(classTypeParameters[i]));
+            }
+            for (int i = fromIndex; i < classTypeParameters.length; i++) {
+                newSubstitutor = newSubstitutor.put(classTypeParameters[i], psiTypes[i - fromIndex]);
+            }
+            return elementFactory.createType(psiClass, newSubstitutor);
+        }
+        return elementFactory.createType(psiClass);
+    }
     @NotNull
     private LombokLightClassBuilder createEmptyBuilderClass(@NotNull PsiClass psiClass, @NotNull PsiMethod psiMethod, @NotNull PsiAnnotation psiAnnotation) {
         return createBuilderClass(psiClass, psiMethod,
@@ -361,15 +436,7 @@ public class TblHandler {
 
     @NotNull
     public Collection<PsiMethod> createConstructors(@NotNull PsiClass psiClass, @NotNull PsiAnnotation psiAnnotation) {
-        final Collection<PsiMethod> methodsIntern = PsiClassUtil.collectClassConstructorIntern(psiClass);
-
-        final String constructorName = noArgsConstructorProcessor.getConstructorName(psiClass);
-        for (PsiMethod existedConstructor : methodsIntern) {
-            if (constructorName.equals(existedConstructor.getName()) && existedConstructor.getParameterList().getParametersCount() == 0) {
-                return Collections.emptySet();
-            }
-        }
-        return noArgsConstructorProcessor.createNoArgsConstructor(psiClass, PsiModifier.PACKAGE_LOCAL, psiAnnotation);
+        return Collections.emptySet();
     }
 
 
