@@ -12,6 +12,7 @@ import de.plushnikov.intellij.plugin.util.PsiAnnotationSearchUtil;
 import de.plushnikov.intellij.plugin.util.PsiClassUtil;
 import de.plushnikov.intellij.plugin.util.PsiTypeUtil;
 import org.jetbrains.annotations.NotNull;
+import top.onceio.core.db.annotation.Col;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -21,7 +22,7 @@ public class TaleMetaInfo {
     private static final String BUILDER_OBTAIN_VIA_FIELD = "field";
     private static final String BUILDER_OBTAIN_VIA_METHOD = "method";
     private static final String BUILDER_OBTAIN_VIA_STATIC = "isStatic";
-
+    private PsiAnnotation colAnnotation;
     private PsiVariable variableInClass;
     private PsiType fieldInBuilderType;
     private boolean deprecated;
@@ -29,7 +30,6 @@ public class TaleMetaInfo {
     private String setterPrefix;
 
     private String builderChainResult = "this";
-    private PsiClass psiClass;
     private PsiClass builderClass;
     private PsiType builderClassType;
 
@@ -61,7 +61,7 @@ public class TaleMetaInfo {
 
     public static TaleMetaInfo fromPsiField(@NotNull PsiField psiField) {
         final TaleMetaInfo result = new TaleMetaInfo();
-
+        result.colAnnotation = psiField.getAnnotation(Col.class.getName());
         result.variableInClass = psiField;
         result.deprecated = isDeprecated(psiField);
         result.fieldInBuilderType = psiField.getType();
@@ -71,10 +71,6 @@ public class TaleMetaInfo {
         final AccessorsInfo accessorsInfo = AccessorsInfo.build(psiField);
         result.fieldInBuilderName = accessorsInfo.removePrefix(psiField.getName());
         return result;
-    }
-
-    public void setPsiClass(PsiClass psiClass) {
-        this.psiClass = psiClass;
     }
 
     private static boolean isDeprecated(@NotNull PsiField psiField) {
@@ -128,6 +124,9 @@ public class TaleMetaInfo {
             if (isInitializedFinalField && !hasBuilderDefaultAnnotation) {
                 result = false;
             }
+        }
+        if(colAnnotation == null) {
+            result = false;
         }
 
         //Skip fields that start with $
@@ -269,11 +268,14 @@ public class TaleMetaInfo {
 
     PsiType getBuilderFieldType(@NotNull PsiType psiFieldType, @NotNull Project project) {
         final PsiManager psiManager = PsiManager.getInstance(project);
-        PsiType co = PsiTypeUtil.createCollectionType(psiManager, psiClass.getQualifiedName());
-        if (PsiType.CHAR.isAssignableFrom(psiFieldType)) {
-            return PsiTypeUtil.createCollectionType(psiManager, "top.onceio.core.db.model.StringCol", co);
-        } else {
+        PsiType co = getBuilderType();
+        if (PsiType.BOOLEAN.isAssignableFrom(psiFieldType)||PsiType.BYTE.isAssignableFrom(psiFieldType)
+                || PsiType.SHORT.isAssignableFrom(psiFieldType)
+                || PsiType.INT.isAssignableFrom(psiFieldType)|| PsiType.FLOAT.isAssignableFrom(psiFieldType)
+                || PsiType.LONG.isAssignableFrom(psiFieldType)|| PsiType.DOUBLE.isAssignableFrom(psiFieldType)) {
             return PsiTypeUtil.createCollectionType(psiManager, "top.onceio.core.db.model.BaseCol", co);
+        } else {
+            return PsiTypeUtil.createCollectionType(psiManager, "top.onceio.core.db.model.StringCol", co);
         }
     }
 

@@ -10,7 +10,6 @@ import de.plushnikov.intellij.plugin.problem.LombokProblem;
 import de.plushnikov.intellij.plugin.problem.ProblemBuilder;
 import de.plushnikov.intellij.plugin.problem.ProblemEmptyBuilder;
 import de.plushnikov.intellij.plugin.processor.clazz.AbstractClassProcessor;
-import de.plushnikov.intellij.plugin.processor.handler.BuilderHandler;
 import de.plushnikov.intellij.plugin.settings.ProjectSettings;
 import de.plushnikov.intellij.plugin.util.PsiAnnotationSearchUtil;
 import de.plushnikov.intellij.plugin.util.PsiClassUtil;
@@ -19,21 +18,17 @@ import org.jetbrains.annotations.Nullable;
 import top.onceio.plugins.handler.TblHandler;
 
 import java.lang.annotation.Annotation;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public abstract class AbstractTblPreDefinedInnerClassProcessor extends AbstractClassProcessor {
 
     final TblHandler tblHandler;
 
-    AbstractTblPreDefinedInnerClassProcessor(@NotNull TblHandler builderHandler,
+    AbstractTblPreDefinedInnerClassProcessor(@NotNull TblHandler tblHandler,
                                                  @NotNull Class<? extends PsiElement> supportedClass,
                                                  @NotNull Class<? extends Annotation> supportedAnnotationClass) {
         super(supportedClass, supportedAnnotationClass);
-        this.tblHandler = builderHandler;
+        this.tblHandler = tblHandler;
     }
 
     @Override

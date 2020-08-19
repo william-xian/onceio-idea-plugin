@@ -3,24 +3,16 @@ package top.onceio.plugins.handler;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.light.LightTypeParameterBuilder;
 import de.plushnikov.intellij.plugin.problem.ProblemBuilder;
-import de.plushnikov.intellij.plugin.processor.clazz.ToStringProcessor;
-import de.plushnikov.intellij.plugin.processor.clazz.constructor.NoArgsConstructorProcessor;
 import de.plushnikov.intellij.plugin.psi.LombokLightClassBuilder;
 import de.plushnikov.intellij.plugin.psi.LombokLightMethodBuilder;
 import de.plushnikov.intellij.plugin.util.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import top.onceio.plugins.processor.clazz.tbl.TblClassProcessor;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static com.intellij.openapi.util.text.StringUtil.capitalize;
-import static com.intellij.openapi.util.text.StringUtil.replace;
 
 
 /**
@@ -65,51 +57,10 @@ public class TblHandler {
             result = validateBuilderIdentifier(builderClassName, project, problemBuilder) &&
                     (builderMethodName.isEmpty() || validateBuilderIdentifier(builderMethodName, project, problemBuilder)) &&
                     validateExistingBuilderClass(builderClassName, psiClass, problemBuilder);
-            if (result) {
-                final Collection<TaleMetaInfo> taleMetaInfos = createTableMetaInfos(psiClass, null).collect(Collectors.toList());
-                result = validateSingular(taleMetaInfos, problemBuilder) &&
-                        validateBuilderDefault(taleMetaInfos, problemBuilder) &&
-                        validateObtainViaAnnotations(taleMetaInfos.stream(), problemBuilder);
-            }
         }
         return result;
     }
 
-    private boolean validateBuilderDefault(@NotNull Collection<TaleMetaInfo> taleMetaInfos, @NotNull ProblemBuilder problemBuilder) {
-        final Optional<TaleMetaInfo> anyBuilderDefaultAndSingulars = taleMetaInfos.stream()
-                .filter(TaleMetaInfo::hasBuilderDefaultAnnotation).findAny();
-        anyBuilderDefaultAndSingulars.ifPresent(taleMetaInfo -> {
-                    problemBuilder.addError("@Builder.Default and @Singular cannot be mixed.");
-                }
-        );
-
-        return !anyBuilderDefaultAndSingulars.isPresent();
-    }
-
-    public boolean validate(@NotNull PsiMethod psiMethod, @NotNull PsiAnnotation psiAnnotation, @NotNull ProblemBuilder problemBuilder) {
-        final PsiClass psiClass = psiMethod.getContainingClass();
-        boolean result = null != psiClass;
-        if (result) {
-            final String builderClassName = getBuilderClassName(psiClass, psiAnnotation, psiMethod);
-
-            final Project project = psiAnnotation.getProject();
-            final String builderMethodName = getMetaMethodName(psiAnnotation);
-            result = validateBuilderIdentifier(builderClassName, project, problemBuilder) &&
-                    (builderMethodName.isEmpty() || validateBuilderIdentifier(builderMethodName, project, problemBuilder)) &&
-                    validateExistingBuilderClass(builderClassName, psiClass, problemBuilder);
-            if (result) {
-                final Stream<TaleMetaInfo> tableMetaInfos = createTableMetaInfos(psiClass, psiMethod);
-                result = validateObtainViaAnnotations(tableMetaInfos, problemBuilder);
-            }
-        }
-        return result;
-    }
-
-    private boolean validateSingular(Collection<TaleMetaInfo> taleMetaInfos, @NotNull ProblemBuilder problemBuilder) {
-        AtomicBoolean result = new AtomicBoolean(true);
-
-        return result.get();
-    }
 
     private boolean validateBuilderIdentifier(@NotNull String builderClassName, @NotNull Project project, @NotNull ProblemBuilder builder) {
         final PsiNameHelper psiNameHelper = PsiNameHelper.getInstance(project);
@@ -142,36 +93,10 @@ public class TblHandler {
         return true;
     }
 
-    private boolean validateObtainViaAnnotations(Stream<TaleMetaInfo> tableMetaInfos, @NotNull ProblemBuilder problemBuilder) {
-        AtomicBoolean result = new AtomicBoolean(true);
-        tableMetaInfos.map(TaleMetaInfo::withObtainVia).filter(TaleMetaInfo::hasObtainViaAnnotation).forEach(taleMetaInfo ->
-        {
-            if (StringUtil.isEmpty(taleMetaInfo.getViaFieldName()) == StringUtil.isEmpty(taleMetaInfo.getViaMethodName())) {
-                problemBuilder.addError("The syntax is either @ObtainVia(field = \"fieldName\") or @ObtainVia(method = \"methodName\").");
-                result.set(false);
-            }
-
-            if (StringUtil.isEmpty(taleMetaInfo.getViaMethodName()) && taleMetaInfo.isViaStaticCall()) {
-                problemBuilder.addError("@ObtainVia(isStatic = true) is not valid unless 'method' has been set.");
-                result.set(false);
-            }
-        });
-        return result.get();
-    }
 
     public Optional<PsiClass> getExistInnerBuilderClass(@NotNull PsiClass psiClass, @Nullable PsiMethod psiMethod, @NotNull PsiAnnotation psiAnnotation) {
         final String builderClassName = getBuilderClassName(psiClass, psiAnnotation, psiMethod);
         return PsiClassUtil.getInnerClassInternByName(psiClass, builderClassName);
-    }
-
-    PsiType getReturnTypeOfBuildMethod(@NotNull PsiClass psiClass, @Nullable PsiMethod psiMethod) {
-        final PsiType result;
-        if (null == psiMethod || psiMethod.isConstructor()) {
-            result = PsiClassUtil.getTypeWithGenerics(psiClass);
-        } else {
-            result = psiMethod.getReturnType();
-        }
-        return result;
     }
 
 
@@ -261,15 +186,6 @@ public class TblHandler {
         return Optional.empty();
     }
 
-    private PsiType calculateResultType(@NotNull List<TaleMetaInfo> taleMetaInfos, PsiClass builderPsiClass, PsiClass psiClass) {
-        final PsiElementFactory factory = JavaPsiFacade.getElementFactory(psiClass.getProject());
-        final PsiType[] psiTypes = taleMetaInfos.stream()
-                .map(TaleMetaInfo::getObtainViaFieldVariableType)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .toArray(PsiType[]::new);
-        return factory.createType(builderPsiClass, psiTypes);
-    }
 
     @NotNull
     private Stream<TaleMetaInfo> createTableMetaInfos(@NotNull PsiClass psiClass, @Nullable PsiMethod psiClassMethod) {
@@ -278,10 +194,7 @@ public class TblHandler {
             result = Arrays.stream(psiClassMethod.getParameterList().getParameters()).map(TaleMetaInfo::fromPsiParameter);
         } else {
             result = PsiClassUtil.collectClassFieldsIntern(psiClass).stream().map(TaleMetaInfo::fromPsiField)
-                    .filter(TaleMetaInfo::useForBuilder).filter((t) -> {
-                        t.setPsiClass(psiClass);
-                        return t.useForBuilder();
-                    });
+                    .filter(TaleMetaInfo::useForBuilder);
 
         }
 
@@ -306,66 +219,30 @@ public class TblHandler {
     public String getBuilderClassName(@NotNull PsiClass psiClass) {
         return getBuilderClassName(psiClass, psiClass.getName());
     }
-    private String selectNonClashingNameFor(String classGenericName, Collection<String> typeParamStrings) {
-        String result = classGenericName;
-        if (typeParamStrings.contains(classGenericName)) {
-            int counter = 2;
-            do {
-                result = classGenericName + counter++;
-            } while (typeParamStrings.contains(result));
-        }
-        return result;
-    }
+
     @NotNull
     public PsiClass createBuilderClass(@NotNull PsiClass psiClass, @Nullable PsiMethod psiMethod, @NotNull PsiAnnotation psiAnnotation) {
-        String builderClassName = getBuilderClassName(psiClass);
-        String builderClassQualifiedName = psiClass.getQualifiedName() + "." + builderClassName;
-
-        final LombokLightClassBuilder baseClassBuilder = new LombokLightClassBuilder(psiClass, builderClassName, builderClassQualifiedName)
-                .withContainingClass(psiClass)
-                .withNavigationElement(psiAnnotation)
-                .withParameterTypes(psiClass.getTypeParameterList())
-                .withModifier(PsiModifier.PUBLIC)
-                .withModifier(PsiModifier.STATIC)
-                .withModifier(PsiModifier.ABSTRACT);
-
-        final List<String> typeParamNames = Stream.of(psiClass.getTypeParameters()).map(PsiTypeParameter::getName).collect(Collectors.toList());
-
-        final LightTypeParameterBuilder c = new LightTypeParameterBuilder(selectNonClashingNameFor("C", typeParamNames), baseClassBuilder, 0);
-        c.getExtendsList().addReference(PsiClassUtil.getTypeWithGenerics(psiClass));
-        baseClassBuilder.withParameterType(c);
-
-        final LightTypeParameterBuilder b = new LightTypeParameterBuilder(selectNonClashingNameFor("B", typeParamNames), baseClassBuilder, 1);
-        baseClassBuilder.withParameterType(b);
-        b.getExtendsList().addReference(PsiClassUtil.getTypeWithGenerics(baseClassBuilder));
-
-        final PsiElementFactory factory = JavaPsiFacade.getElementFactory(psiClass.getProject());
-        final PsiClassType bType = factory.createType(b);
-        final PsiClassType cType = factory.createType(c);
-
         LombokLightClassBuilder builderClass;
         if (null != psiMethod) {
             builderClass = createEmptyBuilderClass(psiClass, psiMethod, psiAnnotation);
         } else {
             builderClass = createEmptyBuilderClass(psiClass, psiAnnotation);
         }
+        final List<TaleMetaInfo> taleMetaInfos = createTableMetaInfos(psiAnnotation, psiClass, psiMethod, builderClass);
+
         final PsiClass superClass = psiClass.getSuperClass();
         if (null != superClass && !"Object".equals(superClass.getName())) {
             final PsiClass parentBuilderClass = superClass.findInnerClassByName(getBuilderClassName(superClass), false);
             if (null != parentBuilderClass) {
-                final PsiType[] explicitTypes = Stream.concat(
-                        Stream.of(psiClass.getExtendsListTypes()).map(PsiClassType::getParameters).flatMap(Stream::of),
-                        Stream.of(cType, bType))
-                        .toArray(PsiType[]::new);
+                PsiType psiClassType = taleMetaInfos.stream().findFirst().get().getBuilderType();
+                final PsiClassType extendsType = getTypeWithSpecificTypeParameters(parentBuilderClass, psiClassType);
 
-                final PsiClassType extendsType = getTypeWithSpecificTypeParameters(parentBuilderClass, explicitTypes);
                 builderClass.withExtends(extendsType);
             }
         }
 
         builderClass.withMethods(createConstructors(builderClass, psiAnnotation));
 
-        final List<TaleMetaInfo> taleMetaInfos = createTableMetaInfos(psiAnnotation, psiClass, psiMethod, builderClass);
 
         // create builder Fields
         taleMetaInfos.stream()
@@ -439,39 +316,6 @@ public class TblHandler {
         return Collections.emptySet();
     }
 
-
-    private boolean sameParameters(PsiParameter[] parameters, List<TaleMetaInfo> taleMetaInfos) {
-        if (parameters.length != taleMetaInfos.size()) {
-            return false;
-        }
-
-        final Iterator<TaleMetaInfo> tableMetaInfoIterator = taleMetaInfos.iterator();
-        for (PsiParameter psiParameter : parameters) {
-            final TaleMetaInfo taleMetaInfo = tableMetaInfoIterator.next();
-            if (!psiParameter.getType().isAssignableFrom(taleMetaInfo.getFieldType())) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-
-    @NotNull
-    private String calculateCallExpressionForMethod(@NotNull PsiMethod psiMethod, @NotNull PsiClass builderClass) {
-        final PsiClass containingClass = psiMethod.getContainingClass();
-
-        StringBuilder className = new StringBuilder();
-        if (null != containingClass) {
-            className.append(containingClass.getName()).append(".");
-            if (!psiMethod.isConstructor() && !psiMethod.hasModifierProperty(PsiModifier.STATIC)) {
-                className.append("this.");
-            }
-            if (builderClass.hasTypeParameters()) {
-                className.append(Arrays.stream(builderClass.getTypeParameters()).map(PsiTypeParameter::getName).collect(Collectors.joining(",", "<", ">")));
-            }
-        }
-        return className + psiMethod.getName();
-    }
 
     void addTypeParameters(@NotNull PsiClass builderClass, @Nullable PsiMethod psiMethod, @NotNull LombokLightMethodBuilder methodBuilder) {
         final PsiTypeParameter[] psiTypeParameters;
