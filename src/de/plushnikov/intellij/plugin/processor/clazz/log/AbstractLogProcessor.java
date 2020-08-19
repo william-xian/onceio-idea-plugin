@@ -4,7 +4,7 @@ import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
-import de.plushnikov.intellij.plugin.lombokconfig.ConfigDiscovery;
+import top.onceio.plugins.config.OnceIOConfigDiscovery;
 import de.plushnikov.intellij.plugin.lombokconfig.ConfigKey;
 import de.plushnikov.intellij.plugin.problem.ProblemBuilder;
 import de.plushnikov.intellij.plugin.processor.clazz.AbstractClassProcessor;
@@ -60,11 +60,11 @@ public abstract class AbstractLogProcessor extends AbstractClassProcessor {
 
   @NotNull
   public static String getLoggerName(@NotNull PsiClass psiClass) {
-    return ConfigDiscovery.getInstance().getStringLombokConfigProperty(ConfigKey.LOG_FIELDNAME, psiClass);
+    return OnceIOConfigDiscovery.getInstance().getStringLombokConfigProperty(ConfigKey.LOG_FIELDNAME, psiClass);
   }
 
   public static boolean isLoggerStatic(@NotNull PsiClass psiClass) {
-    return ConfigDiscovery.getInstance().getBooleanLombokConfigProperty(ConfigKey.LOG_FIELD_IS_STATIC, psiClass);
+    return OnceIOConfigDiscovery.getInstance().getBooleanLombokConfigProperty(ConfigKey.LOG_FIELD_IS_STATIC, psiClass);
   }
 
   /**

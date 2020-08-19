@@ -7,8 +7,8 @@ import com.intellij.openapi.components.Storage;
 import org.jetbrains.annotations.Nullable;
 
 @State(
-        name = "LombokSettings",
-        storages = @Storage("lombok-plugin.xml")
+        name = "OnceIOSettings",
+        storages = @Storage("onceio-plugin.xml")
 )
 public class OnceIOSettings implements PersistentStateComponent<OnceIOPluginState> {
 

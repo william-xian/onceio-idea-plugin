@@ -5,7 +5,7 @@ import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 
 public class ProjectSettings {
-  private static final String PREFIX = "LombokPlugin";
+  private static final String PREFIX = "OnceIOPlugin";
 
   public static final String LOMBOK_ENABLED_IN_PROJECT = PREFIX + "EnabledInProject";
   public static final String IS_VAL_ENABLED = PREFIX + "IS_VAL_Enabled";

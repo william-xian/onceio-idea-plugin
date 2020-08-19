@@ -3,7 +3,7 @@ package de.plushnikov.intellij.plugin.processor.handler;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
-import de.plushnikov.intellij.plugin.lombokconfig.ConfigDiscovery;
+import top.onceio.plugins.config.OnceIOConfigDiscovery;
 import de.plushnikov.intellij.plugin.problem.ProblemBuilder;
 import de.plushnikov.intellij.plugin.processor.clazz.ToStringProcessor;
 import de.plushnikov.intellij.plugin.processor.clazz.constructor.NoArgsConstructorProcessor;
@@ -268,8 +268,8 @@ public class BuilderHandler {
 
   @NotNull
   String getBuilderClassName(@NotNull PsiClass psiClass, String returnTypeName) {
-    final ConfigDiscovery configDiscovery = ConfigDiscovery.getInstance();
-    final String builderClassNamePattern = configDiscovery.getStringLombokConfigProperty(BUILDER_CLASS_NAME, psiClass);
+    final OnceIOConfigDiscovery onceIOConfigDiscovery = OnceIOConfigDiscovery.getInstance();
+    final String builderClassNamePattern = onceIOConfigDiscovery.getStringLombokConfigProperty(BUILDER_CLASS_NAME, psiClass);
     return replace(builderClassNamePattern, "*", capitalize(returnTypeName));
   }
 

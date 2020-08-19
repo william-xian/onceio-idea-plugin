@@ -170,7 +170,7 @@ public abstract class AbstractClassProcessor extends AbstractProcessor implement
   }
 
   boolean shouldGenerateNoArgsConstructor(@NotNull PsiClass psiClass, @NotNull AbstractConstructorClassProcessor argsConstructorProcessor) {
-    boolean result = configDiscovery.getBooleanLombokConfigProperty(ConfigKey.NO_ARGS_CONSTRUCTOR_EXTRA_PRIVATE, psiClass);
+    boolean result = onceIOConfigDiscovery.getBooleanLombokConfigProperty(ConfigKey.NO_ARGS_CONSTRUCTOR_EXTRA_PRIVATE, psiClass);
     if (result) {
       result = !PsiClassUtil.hasSuperClass(psiClass);
     }
@@ -190,7 +190,7 @@ public abstract class AbstractClassProcessor extends AbstractProcessor implement
     final boolean result;
     final Boolean declaredAnnotationValue = PsiAnnotationUtil.getDeclaredBooleanAnnotationValue(psiAnnotation, "callSuper");
     if (null == declaredAnnotationValue) {
-      final String configProperty = configDiscovery.getStringLombokConfigProperty(configKey, psiClass);
+      final String configProperty = onceIOConfigDiscovery.getStringLombokConfigProperty(configKey, psiClass);
       result = PsiClassUtil.hasSuperClass(psiClass) && "CALL".equalsIgnoreCase(configProperty);
     } else {
       result = declaredAnnotationValue;

@@ -6,7 +6,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiModifierList;
 import com.intellij.psi.PsiModifierListOwner;
-import de.plushnikov.intellij.plugin.lombokconfig.ConfigDiscovery;
+import top.onceio.plugins.config.OnceIOConfigDiscovery;
 import de.plushnikov.intellij.plugin.lombokconfig.ConfigKey;
 import de.plushnikov.intellij.plugin.util.LombokProcessorUtil;
 import de.plushnikov.intellij.plugin.util.PsiAnnotationSearchUtil;
@@ -35,7 +35,7 @@ public abstract class AbstractProcessor implements Processor {
   /**
    * Instance of config discovery service to access lombok.config informations
    */
-  protected final ConfigDiscovery configDiscovery;
+  protected final OnceIOConfigDiscovery onceIOConfigDiscovery;
 
   /**
    * Constructor for all Lombok-Processors
@@ -45,7 +45,7 @@ public abstract class AbstractProcessor implements Processor {
   @SuppressWarnings("unchecked")
   protected AbstractProcessor(@NotNull Class<? extends PsiElement> supportedClass,
                               @NotNull Class<? extends Annotation> supportedAnnotationClass) {
-    this.configDiscovery = ConfigDiscovery.getInstance();
+    this.onceIOConfigDiscovery = OnceIOConfigDiscovery.getInstance();
     this.supportedClass = supportedClass;
     this.supportedAnnotationClasses = new Class[]{supportedAnnotationClass};
   }
@@ -60,7 +60,7 @@ public abstract class AbstractProcessor implements Processor {
   protected AbstractProcessor(@NotNull Class<? extends PsiElement> supportedClass,
                               @NotNull Class<? extends Annotation> supportedAnnotationClass,
                               @NotNull Class<? extends Annotation> equivalentAnnotationClass) {
-    this.configDiscovery = ConfigDiscovery.getInstance();
+    this.onceIOConfigDiscovery = OnceIOConfigDiscovery.getInstance();
     this.supportedClass = supportedClass;
     this.supportedAnnotationClasses = new Class[]{supportedAnnotationClass, equivalentAnnotationClass};
   }
@@ -77,7 +77,7 @@ public abstract class AbstractProcessor implements Processor {
                     @NotNull Class<? extends Annotation> supportedAnnotationClass,
                     @NotNull Class<? extends Annotation> oneEquivalentAnnotationClass,
                     @NotNull Class<? extends Annotation> secondEquivalentAnnotationClass) {
-    this.configDiscovery = ConfigDiscovery.getInstance();
+    this.onceIOConfigDiscovery = OnceIOConfigDiscovery.getInstance();
     this.supportedClass = supportedClass;
     this.supportedAnnotationClasses = new Class[]{supportedAnnotationClass, oneEquivalentAnnotationClass, secondEquivalentAnnotationClass};
   }
@@ -109,7 +109,7 @@ public abstract class AbstractProcessor implements Processor {
     final boolean result;
     final Boolean declaredAnnotationValue = PsiAnnotationUtil.getDeclaredBooleanAnnotationValue(psiAnnotation, annotationParameter);
     if (null == declaredAnnotationValue) {
-      result = configDiscovery.getBooleanLombokConfigProperty(configKey, psiClass);
+      result = onceIOConfigDiscovery.getBooleanLombokConfigProperty(configKey, psiClass);
     } else {
       result = declaredAnnotationValue;
     }

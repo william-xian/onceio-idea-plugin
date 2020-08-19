@@ -5,7 +5,7 @@ import java.util.List;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiClass;
-import de.plushnikov.intellij.plugin.lombokconfig.ConfigDiscovery;
+import top.onceio.plugins.config.OnceIOConfigDiscovery;
 import de.plushnikov.intellij.plugin.lombokconfig.ConfigKey;
 import de.plushnikov.intellij.plugin.problem.ProblemBuilder;
 import de.plushnikov.intellij.plugin.processor.clazz.log.CustomLogParser.LoggerInitializerDeclaration;
@@ -25,7 +25,7 @@ public class CustomLogProcessor extends AbstractLogProcessor {
 
   @NotNull
   private static String getCustomDeclaration(@NotNull PsiClass psiClass) {
-    return ConfigDiscovery.getInstance().getStringLombokConfigProperty(ConfigKey.LOG_CUSTOM_DECLARATION, psiClass);
+    return OnceIOConfigDiscovery.getInstance().getStringLombokConfigProperty(ConfigKey.LOG_CUSTOM_DECLARATION, psiClass);
   }
 
   @Nullable

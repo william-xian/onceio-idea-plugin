@@ -11,7 +11,7 @@ import de.plushnikov.intellij.plugin.util.PsiAnnotationUtil;
 import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import top.onceio.plugins.config.ConfigDiscovery;
+import top.onceio.plugins.config.OnceIOConfigDiscovery;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -96,26 +96,26 @@ public class AccessorsInfo {
         final String[] prefixes;
 
         if (null != psiClass) {
-            final ConfigDiscovery configDiscovery = ConfigDiscovery.getInstance();
+            final OnceIOConfigDiscovery onceIOConfigDiscovery = OnceIOConfigDiscovery.getInstance();
             if (null == fluentDeclaredValue) {
-                isFluent = configDiscovery.getBooleanLombokConfigProperty(ConfigKey.ACCESSORS_FLUENT, psiClass);
+                isFluent = onceIOConfigDiscovery.getBooleanLombokConfigProperty(ConfigKey.ACCESSORS_FLUENT, psiClass);
             } else {
                 isFluent = fluentDeclaredValue;
             }
 
             if (null == chainDeclaredValue) {
-                isChained = configDiscovery.getBooleanLombokConfigProperty(ConfigKey.ACCESSORS_CHAIN, psiClass);
+                isChained = onceIOConfigDiscovery.getBooleanLombokConfigProperty(ConfigKey.ACCESSORS_CHAIN, psiClass);
             } else {
                 isChained = chainDeclaredValue;
             }
 
             if (prefixDeclared.isEmpty()) {
-                prefixes = configDiscovery.getMultipleValueLombokConfigProperty(ConfigKey.ACCESSORS_PREFIX, psiClass);
+                prefixes = onceIOConfigDiscovery.getMultipleValueLombokConfigProperty(ConfigKey.ACCESSORS_PREFIX, psiClass);
             } else {
                 prefixes = prefixDeclared.toArray(new String[0]);
             }
 
-            doNotUseIsPrefix = configDiscovery.getBooleanLombokConfigProperty(ConfigKey.GETTER_NO_IS_PREFIX, psiClass);
+            doNotUseIsPrefix = onceIOConfigDiscovery.getBooleanLombokConfigProperty(ConfigKey.GETTER_NO_IS_PREFIX, psiClass);
 
         } else {
             isFluent = null == fluentDeclaredValue ? false : fluentDeclaredValue;

@@ -2,7 +2,7 @@ package de.plushnikov.intellij.plugin.processor.handler;
 
 import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
-import de.plushnikov.intellij.plugin.lombokconfig.ConfigDiscovery;
+import top.onceio.plugins.config.OnceIOConfigDiscovery;
 import de.plushnikov.intellij.plugin.lombokconfig.ConfigKey;
 import de.plushnikov.intellij.plugin.psi.LombokEnumConstantBuilder;
 import de.plushnikov.intellij.plugin.psi.LombokLightClassBuilder;
@@ -26,8 +26,8 @@ public class FieldNameConstantsHandler {
   public static String getTypeName(@NotNull PsiClass containingClass, @NotNull PsiAnnotation fieldNameConstants) {
     String typeName = PsiAnnotationUtil.getStringAnnotationValue(fieldNameConstants, "innerTypeName");
     if (typeName == null || typeName.equals("")) {
-      final ConfigDiscovery configDiscovery = ConfigDiscovery.getInstance();
-      typeName = configDiscovery.getStringLombokConfigProperty(ConfigKey.FIELD_NAME_CONSTANTS_TYPENAME, containingClass);
+      final OnceIOConfigDiscovery onceIOConfigDiscovery = OnceIOConfigDiscovery.getInstance();
+      typeName = onceIOConfigDiscovery.getStringLombokConfigProperty(ConfigKey.FIELD_NAME_CONSTANTS_TYPENAME, containingClass);
     }
     return typeName;
   }
@@ -47,8 +47,8 @@ public class FieldNameConstantsHandler {
   }
 
   private static boolean useUppercasedConstants(@NotNull PsiClass containingClass) {
-    final ConfigDiscovery configDiscovery = ConfigDiscovery.getInstance();
-    return configDiscovery.getBooleanLombokConfigProperty(ConfigKey.FIELD_NAME_CONSTANTS_UPPERCASE, containingClass);
+    final OnceIOConfigDiscovery onceIOConfigDiscovery = OnceIOConfigDiscovery.getInstance();
+    return onceIOConfigDiscovery.getBooleanLombokConfigProperty(ConfigKey.FIELD_NAME_CONSTANTS_UPPERCASE, containingClass);
   }
 
   public static List<PsiField> createFields(@NotNull PsiClass containingClass, @NotNull Collection<PsiField> psiFields) {

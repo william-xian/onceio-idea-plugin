@@ -38,7 +38,7 @@
     <projectService serviceImplementation="top.onceio.plugins.provider.OnceIOProcessorProvider"/>
     <!-- END of lombok Processors-->
 
-    <applicationService serviceImplementation="top.onceio.plugins.config.ConfigDiscovery"/>
+    <applicationService serviceImplementation="top.onceio.plugins.config.OnceIOConfigDiscovery"/>
 
     <applicationService serviceImplementation="top.onceio.plugins.settings.OnceIOSettings"/>
 
@@ -53,9 +53,6 @@
 
     <daemon.highlightInfoFilter implementation="de.plushnikov.intellij.plugin.extension.LombokHighlightErrorFilter"/>
 
-    <fileType implementationClass="de.plushnikov.intellij.plugin.language.LombokConfigFileType" name="LOMBOK_CONFIG"
-              language="Lombok.Config"
-              fieldName="INSTANCE" extensions="config" fileNames="lombok.config"/>
 
     <lang.commenter language="Lombok.Config"
                     implementationClass="de.plushnikov.intellij.plugin.language.LombokConfigCommentor"/>
@@ -86,9 +83,9 @@
 
 
     <localInspection
-            displayName="Lombok annotations"
-            groupName="Lombok"
-            shortName="Lombok"
+            displayName="OnceIO annotations"
+            groupName="OnceIOPlugin"
+            shortName="OnceIOPlugin"
             enabledByDefault="true"
             implementationClass="top.onceio.plugins.inspection.OnceIOInspection"/>
 

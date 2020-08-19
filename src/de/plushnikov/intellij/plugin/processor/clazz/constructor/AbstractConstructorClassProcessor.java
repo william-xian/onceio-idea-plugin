@@ -288,8 +288,8 @@ public abstract class AbstractConstructorClassProcessor extends AbstractClassPro
     }
 
     if (!fieldNames.isEmpty()) {
-      boolean addConstructorProperties = configDiscovery.getBooleanLombokConfigProperty(ConfigKey.ANYCONSTRUCTOR_ADD_CONSTRUCTOR_PROPERTIES, psiClass);
-      if (addConstructorProperties || !configDiscovery.getBooleanLombokConfigProperty(ConfigKey.ANYCONSTRUCTOR_SUPPRESS_CONSTRUCTOR_PROPERTIES, psiClass)) {
+      boolean addConstructorProperties = onceIOConfigDiscovery.getBooleanLombokConfigProperty(ConfigKey.ANYCONSTRUCTOR_ADD_CONSTRUCTOR_PROPERTIES, psiClass);
+      if (addConstructorProperties || !onceIOConfigDiscovery.getBooleanLombokConfigProperty(ConfigKey.ANYCONSTRUCTOR_SUPPRESS_CONSTRUCTOR_PROPERTIES, psiClass)) {
         final String constructorPropertiesAnnotation = "java.beans.ConstructorProperties( {" +
           fieldNames.stream().collect(Collectors.joining("\", \"", "\"", "\"")) +
           "} ) ";

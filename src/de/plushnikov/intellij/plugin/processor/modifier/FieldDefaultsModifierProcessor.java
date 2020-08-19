@@ -8,7 +8,7 @@ import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiModifier;
 import com.intellij.psi.PsiModifierList;
 import com.intellij.psi.util.PsiTreeUtil;
-import de.plushnikov.intellij.plugin.lombokconfig.ConfigDiscovery;
+import top.onceio.plugins.config.OnceIOConfigDiscovery;
 import de.plushnikov.intellij.plugin.lombokconfig.ConfigKey;
 import de.plushnikov.intellij.plugin.psi.LombokLightFieldBuilder;
 import de.plushnikov.intellij.plugin.util.LombokProcessorUtil;
@@ -29,10 +29,10 @@ import java.util.Set;
  */
 public class FieldDefaultsModifierProcessor implements ModifierProcessor {
 
-  private final ConfigDiscovery configDiscovery;
+  private final OnceIOConfigDiscovery onceIOConfigDiscovery;
 
-  public FieldDefaultsModifierProcessor(@NotNull ConfigDiscovery configDiscovery) {
-    this.configDiscovery = configDiscovery;
+  public FieldDefaultsModifierProcessor(@NotNull OnceIOConfigDiscovery onceIOConfigDiscovery) {
+    this.onceIOConfigDiscovery = onceIOConfigDiscovery;
   }
 
   @Override
@@ -98,11 +98,11 @@ public class FieldDefaultsModifierProcessor implements ModifierProcessor {
   }
 
   private boolean isConfigDefaultFinal(PsiClass searchableClass) {
-    return configDiscovery.getBooleanLombokConfigProperty(ConfigKey.FIELDDEFAULTS_FINAL, searchableClass);
+    return onceIOConfigDiscovery.getBooleanLombokConfigProperty(ConfigKey.FIELDDEFAULTS_FINAL, searchableClass);
   }
 
   private boolean isConfigDefaultPrivate(PsiClass searchableClass) {
-    return configDiscovery.getBooleanLombokConfigProperty(ConfigKey.FIELDDEFAULTS_PRIVATE, searchableClass);
+    return onceIOConfigDiscovery.getBooleanLombokConfigProperty(ConfigKey.FIELDDEFAULTS_PRIVATE, searchableClass);
   }
 
   private boolean shouldMakeFinal(@NotNull PsiField parentField, @Nullable PsiAnnotation fieldDefaultsAnnotation, boolean isConfigDefaultFinal) {

@@ -2,7 +2,7 @@ package de.plushnikov.intellij.plugin.processor.field;
 
 import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
-import de.plushnikov.intellij.plugin.lombokconfig.ConfigDiscovery;
+import top.onceio.plugins.config.OnceIOConfigDiscovery;
 import de.plushnikov.intellij.plugin.lombokconfig.ConfigKey;
 import de.plushnikov.intellij.plugin.problem.ProblemBuilder;
 import de.plushnikov.intellij.plugin.processor.LombokPsiElementUsage;
@@ -94,12 +94,12 @@ public class FieldNameConstantsFieldProcessor extends AbstractFieldProcessor {
     String prefix = PsiAnnotationUtil.getStringAnnotationValue(psiAnnotation, "prefix");
     String suffix = PsiAnnotationUtil.getStringAnnotationValue(psiAnnotation, "suffix");
 
-    final ConfigDiscovery configDiscovery = ConfigDiscovery.getInstance();
+    final OnceIOConfigDiscovery onceIOConfigDiscovery = OnceIOConfigDiscovery.getInstance();
     if (CONFIG_DEFAULT.equals(prefix)) {
-      prefix = configDiscovery.getStringLombokConfigProperty(ConfigKey.FIELD_NAME_CONSTANTS_PREFIX, psiClass);
+      prefix = onceIOConfigDiscovery.getStringLombokConfigProperty(ConfigKey.FIELD_NAME_CONSTANTS_PREFIX, psiClass);
     }
     if (CONFIG_DEFAULT.equals(suffix)) {
-      suffix = configDiscovery.getStringLombokConfigProperty(ConfigKey.FIELD_NAME_CONSTANTS_SUFFIX, psiClass);
+      suffix = onceIOConfigDiscovery.getStringLombokConfigProperty(ConfigKey.FIELD_NAME_CONSTANTS_SUFFIX, psiClass);
     }
 
     return prefix + LombokUtils.camelCaseToConstant(psiField.getName()) + suffix;

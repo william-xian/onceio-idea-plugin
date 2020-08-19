@@ -1,4 +1,4 @@
-package de.plushnikov.intellij.plugin.lombokconfig;
+package top.onceio.plugins.config;
 
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
@@ -9,6 +9,8 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.PathUtil;
 import com.intellij.util.indexing.FileBasedIndex;
+import de.plushnikov.intellij.plugin.lombokconfig.ConfigKey;
+import de.plushnikov.intellij.plugin.lombokconfig.ConfigValue;
 import de.plushnikov.intellij.plugin.psi.LombokLightClassBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -19,14 +21,14 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
-public class ConfigDiscovery {
+public class OnceIOConfigDiscovery {
   private final FileBasedIndex fileBasedIndex;
 
-  public static ConfigDiscovery getInstance() {
-    return ServiceManager.getService(ConfigDiscovery.class);
+  public static OnceIOConfigDiscovery getInstance() {
+    return ServiceManager.getService(OnceIOConfigDiscovery.class);
   }
 
-  public ConfigDiscovery(FileBasedIndex fileBasedIndex) {
+  public OnceIOConfigDiscovery(FileBasedIndex fileBasedIndex) {
     this.fileBasedIndex = fileBasedIndex;
   }
 
