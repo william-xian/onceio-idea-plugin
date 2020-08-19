@@ -1,11 +1,11 @@
 package top.onceio.plugins.processor.clazz.tbl;
 
 import com.intellij.psi.*;
-import de.plushnikov.intellij.plugin.processor.handler.BuilderInfo;
 import de.plushnikov.intellij.plugin.util.PsiClassUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import top.onceio.core.db.annotation.Tbl;
+import top.onceio.plugins.handler.TaleMetaInfo;
 import top.onceio.plugins.handler.TblHandler;
 
 import java.util.Collection;
@@ -29,10 +29,10 @@ public class TblPreDefinedInnerClassFieldProcessor extends AbstractTblPreDefined
                 .map(PsiField::getName)
                 .collect(Collectors.toSet());
 
-        final List<BuilderInfo> builderInfos = tblHandler.createBuilderInfos(psiAnnotation, psiParentClass, psiParentMethod, psiBuilderClass);
-        return builderInfos.stream()
+        final List<TaleMetaInfo> taleMetaInfos = tblHandler.createTableMetaInfos(psiAnnotation, psiParentClass, psiParentMethod, psiBuilderClass);
+        return taleMetaInfos.stream()
                 .filter(info -> info.notAlreadyExistingField(existedFieldNames))
-                .map(BuilderInfo::renderBuilderFields)
+                .map(TaleMetaInfo::renderBuilderFields)
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());
     }

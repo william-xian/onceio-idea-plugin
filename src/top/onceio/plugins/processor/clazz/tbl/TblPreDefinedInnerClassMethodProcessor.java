@@ -5,13 +5,13 @@ import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
-import de.plushnikov.intellij.plugin.processor.handler.BuilderInfo;
 import de.plushnikov.intellij.plugin.util.PsiAnnotationSearchUtil;
 import de.plushnikov.intellij.plugin.util.PsiClassUtil;
 import lombok.experimental.Tolerate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import top.onceio.core.db.annotation.Tbl;
+import top.onceio.plugins.handler.TaleMetaInfo;
 import top.onceio.plugins.handler.TblHandler;
 
 import java.util.ArrayList;
@@ -37,16 +37,10 @@ public class TblPreDefinedInnerClassMethodProcessor extends AbstractTblPreDefine
                 .filter(psiMethod -> PsiAnnotationSearchUtil.isNotAnnotatedWith(psiMethod, Tolerate.class))
                 .map(PsiMethod::getName).collect(Collectors.toSet());
 
-        final List<BuilderInfo> builderInfos = tblHandler.createBuilderInfos(psiAnnotation, psiParentClass, psiParentMethod, psiBuilderClass);
+        final List<TaleMetaInfo> taleMetaInfos = tblHandler.createTableMetaInfos(psiAnnotation, psiParentClass, psiParentMethod, psiBuilderClass);
 
         //create constructor
         result.addAll(tblHandler.createConstructors(psiBuilderClass, psiAnnotation));
-
-        // create builder methods
-        builderInfos.stream()
-                .filter(info -> info.notAlreadyExistingMethod(existedMethodNames))
-                .map(BuilderInfo::renderBuilderMethods)
-                .forEach(result::addAll);
 
         return result;
     }
