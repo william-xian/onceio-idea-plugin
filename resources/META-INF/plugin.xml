@@ -74,11 +74,8 @@
     <lang.syntaxHighlighterFactory language="Lombok.Config"
                                    implementationClass="de.plushnikov.intellij.plugin.language.LombokConfigSyntaxHighlighterFactory"/>
     <colorSettingsPage implementation="de.plushnikov.intellij.plugin.language.LombokConfigColorSettingsPage"/>
-    <completion.contributor language="Lombok.Config"
-                            implementationClass="de.plushnikov.intellij.plugin.language.LombokConfigCompletionContributor"/>
     <lang.commenter language="Lombok.Config"
                     implementationClass="de.plushnikov.intellij.plugin.language.LombokConfigCommentor"/>
-    <fileBasedIndex implementation="de.plushnikov.intellij.plugin.lombokconfig.LombokConfigIndex"/>
 
     <custom.exception.handler implementation="de.plushnikov.intellij.plugin.handler.SneakyThrowsExceptionHandler"/>
 

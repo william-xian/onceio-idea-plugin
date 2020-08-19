@@ -146,11 +146,6 @@ public class ConfigDiscovery {
 
   @Nullable
   private ConfigValue readProperty(FileBasedIndex fileBasedIndex, GlobalSearchScope searchScope, String directoryName, ConfigKey configKey) {
-    final ConfigIndexKey configIndexKey = new ConfigIndexKey(directoryName, configKey.getConfigKey());
-    final List<ConfigValue> values = fileBasedIndex.getValues(LombokConfigIndex.NAME, configIndexKey, searchScope);
-    if (!values.isEmpty()) {
-      return values.iterator().next();
-    }
     return null;
   }
 
