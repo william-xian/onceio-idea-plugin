@@ -1,17 +1,13 @@
 <idea-plugin>
-  <id>com.your.company.unique.plugin.id</id>
-  <name>Plugin display name here</name>
+  <id>top.onceio.plugins.idea.id</id>
+  <name>OnceIOPlugin</name>
   <version>1.0</version>
-  <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>
+  <vendor email="1520070240@qq.com" url="http://www.onceio.top">OnceIO</vendor>
 
-  <description><![CDATA[
-      Enter short description for your plugin here.<br>
-      <em>most HTML tags may be used</em>
+  <description><![CDATA[This Plugin is used help to create table meta by POPJO.
     ]]></description>
 
-  <change-notes><![CDATA[
-      Add change notes here.<br>
-      <em>most HTML tags may be used</em>
+  <change-notes><![CDATA[This is the first version for using. We will add new futures in nextVersion
     ]]>
   </change-notes>
 
