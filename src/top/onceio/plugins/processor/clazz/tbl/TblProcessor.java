@@ -6,12 +6,12 @@ import com.intellij.psi.*;
 import de.plushnikov.intellij.plugin.problem.ProblemBuilder;
 import de.plushnikov.intellij.plugin.processor.LombokPsiElementUsage;
 import de.plushnikov.intellij.plugin.processor.clazz.AbstractClassProcessor;
-import de.plushnikov.intellij.plugin.settings.ProjectSettings;
 import lombok.Builder;
 import lombok.Singular;
 import org.jetbrains.annotations.NotNull;
 import top.onceio.core.db.annotation.Tbl;
 import top.onceio.plugins.handler.TblHandler;
+import top.onceio.plugins.settings.ProjectSettings;
 
 import java.util.Collection;
 import java.util.List;

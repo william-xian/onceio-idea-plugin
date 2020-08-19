@@ -6,10 +6,10 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import de.plushnikov.intellij.plugin.problem.ProblemBuilder;
 import de.plushnikov.intellij.plugin.processor.clazz.AbstractClassProcessor;
-import de.plushnikov.intellij.plugin.settings.ProjectSettings;
 import org.jetbrains.annotations.NotNull;
 import top.onceio.core.db.annotation.Tbl;
 import top.onceio.plugins.handler.TblHandler;
+import top.onceio.plugins.settings.ProjectSettings;
 
 import java.util.List;
 

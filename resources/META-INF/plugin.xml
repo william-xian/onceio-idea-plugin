@@ -22,8 +22,8 @@
 
   <extensions defaultExtensionNs="com.intellij">
 
-    <postStartupActivity implementation="de.plushnikov.intellij.plugin.activity.LombokPluginUpdateActivity"/>
-    <postStartupActivity implementation="de.plushnikov.intellij.plugin.activity.LombokProjectValidatorActivity"/>
+    <postStartupActivity implementation="top.onceio.plugins.activity.OnceIOPluginUpdateActivity"/>
+    <postStartupActivity implementation="top.onceio.plugins.activity.OnceIOProjectValidatorActivity"/>
 
     <applicationService
             serviceImplementation="top.onceio.plugins.handler.TblHandler"/>
@@ -38,11 +38,13 @@
     <projectService serviceImplementation="top.onceio.plugins.provider.OnceIOProcessorProvider"/>
     <!-- END of lombok Processors-->
 
-    <applicationService serviceImplementation="de.plushnikov.intellij.plugin.lombokconfig.ConfigDiscovery"/>
-    <applicationService serviceImplementation="de.plushnikov.intellij.plugin.settings.LombokSettings"/>
+    <applicationService serviceImplementation="top.onceio.plugins.config.ConfigDiscovery"/>
+
+    <applicationService serviceImplementation="top.onceio.plugins.settings.OnceIOSettings"/>
 
     <lang.psiAugmentProvider implementation="top.onceio.plugins.provider.OnceIOAugmentProvider"/>
     <implicitUsageProvider implementation="top.onceio.plugins.provider.OnceIOImplicitUsageProvider"/>
+
 
 
     <treeGenerator implementation="de.plushnikov.intellij.plugin.extension.LombokLightMethodTreeGenerator"/>
@@ -81,6 +83,7 @@
     <inlineActionHandler implementation="de.plushnikov.intellij.plugin.action.inline.LombokInlineMethodHandler"/>
 
     <canBeFinal implementation="de.plushnikov.intellij.plugin.extension.LombokCanBeFinalHandler"/>
+
 
     <localInspection
             displayName="Lombok annotations"
