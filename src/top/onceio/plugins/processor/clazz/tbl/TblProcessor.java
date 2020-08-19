@@ -2,21 +2,11 @@ package top.onceio.plugins.processor.clazz.tbl;
 
 
 import com.intellij.ide.util.PropertiesComponent;
-import com.intellij.psi.PsiAnnotation;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiModifier;
+import com.intellij.psi.*;
 import de.plushnikov.intellij.plugin.problem.ProblemBuilder;
 import de.plushnikov.intellij.plugin.processor.LombokPsiElementUsage;
 import de.plushnikov.intellij.plugin.processor.clazz.AbstractClassProcessor;
-import de.plushnikov.intellij.plugin.processor.clazz.constructor.AllArgsConstructorProcessor;
-import de.plushnikov.intellij.plugin.processor.handler.BuilderHandler;
 import de.plushnikov.intellij.plugin.settings.ProjectSettings;
-import de.plushnikov.intellij.plugin.util.PsiAnnotationSearchUtil;
-import de.plushnikov.intellij.plugin.util.PsiClassUtil;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Singular;
 import org.jetbrains.annotations.NotNull;

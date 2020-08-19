@@ -10,10 +10,7 @@ import com.intellij.psi.augment.PsiAugmentProvider;
 import com.intellij.psi.impl.source.PsiExtensibleClass;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
-import de.plushnikov.intellij.plugin.processor.LombokProcessorManager;
 import de.plushnikov.intellij.plugin.processor.Processor;
-import de.plushnikov.intellij.plugin.processor.ValProcessor;
-import de.plushnikov.intellij.plugin.processor.modifier.ModifierProcessor;
 import de.plushnikov.intellij.plugin.settings.ProjectSettings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -28,14 +25,9 @@ import java.util.*;
 public class OnceIOAugmentProvider extends PsiAugmentProvider {
     private static final Logger log = Logger.getInstance(OnceIOAugmentProvider.class.getName());
 
-    private final ValProcessor valProcessor;
-    private final Collection<ModifierProcessor> modifierProcessors;
 
     public OnceIOAugmentProvider() {
         log.debug("LombokAugmentProvider created");
-
-        modifierProcessors = LombokProcessorManager.getLombokModifierProcessors();
-        valProcessor = ServiceManager.getService(ValProcessor.class);
     }
 
     @NotNull
@@ -43,24 +35,7 @@ public class OnceIOAugmentProvider extends PsiAugmentProvider {
     protected Set<String> transformModifiers(@NotNull PsiModifierList modifierList, @NotNull final Set<String> modifiers) {
         // make copy of original modifiers
         Set<String> result = new HashSet<>(modifiers);
-
-        // Loop through all available processors and give all of them a chance to respond
-        for (ModifierProcessor processor : modifierProcessors) {
-            if (processor.isSupported(modifierList)) {
-                processor.transformModifiers(modifierList, result);
-            }
-        }
-
         return result;
-    }
-
-    @Nullable
-    @Override
-    protected PsiType inferType(@NotNull PsiTypeElement typeElement) {
-        if (!valProcessor.isEnabled(typeElement.getProject())) {
-            return null;
-        }
-        return valProcessor.inferType(typeElement);
     }
 
     @NotNull

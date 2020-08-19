@@ -3,7 +3,6 @@ package top.onceio.plugins.processor;
 
 import com.intellij.openapi.components.ServiceManager;
 import de.plushnikov.intellij.plugin.processor.Processor;
-import de.plushnikov.intellij.plugin.processor.modifier.*;
 import org.jetbrains.annotations.NotNull;
 import top.onceio.plugins.processor.clazz.tbl.TblClassProcessor;
 import top.onceio.plugins.processor.clazz.tbl.TblPreDefinedInnerClassFieldProcessor;
@@ -24,12 +23,4 @@ public class OnceIOProcessorManager {
         );
     }
 
-    @NotNull
-    public static Collection<ModifierProcessor> getLombokModifierProcessors() {
-        return Arrays.asList(
-                ServiceManager.getService(FieldDefaultsModifierProcessor.class),
-                ServiceManager.getService(UtilityClassModifierProcessor.class),
-                ServiceManager.getService(ValModifierProcessor.class),
-                ServiceManager.getService(ValueModifierProcessor.class));
-    }
 }

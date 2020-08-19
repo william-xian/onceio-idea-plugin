@@ -8,7 +8,6 @@ import com.intellij.openapi.components.ServiceManager;
 import com.intellij.psi.*;
 import de.plushnikov.intellij.plugin.problem.LombokProblem;
 import de.plushnikov.intellij.plugin.processor.Processor;
-import de.plushnikov.intellij.plugin.processor.ValProcessor;
 import de.plushnikov.intellij.plugin.psi.LombokLightMethodBuilder;
 import org.jetbrains.annotations.NotNull;
 import top.onceio.plugins.provider.OnceIOProcessorProvider;
@@ -21,10 +20,9 @@ import java.util.HashSet;
  */
 public class OnceIOInspection extends AbstractBaseJavaLocalInspectionTool {
 
-    private final ValProcessor valProcessor;
+
 
     public OnceIOInspection() {
-        valProcessor = ServiceManager.getService(ValProcessor.class);
     }
 
     @NotNull
@@ -45,14 +43,11 @@ public class OnceIOInspection extends AbstractBaseJavaLocalInspectionTool {
         public void visitLocalVariable(PsiLocalVariable variable) {
             super.visitLocalVariable(variable);
 
-            valProcessor.verifyVariable(variable, holder);
         }
 
         @Override
         public void visitParameter(PsiParameter parameter) {
             super.visitParameter(parameter);
-
-            valProcessor.verifyParameter(parameter, holder);
         }
 
         @Override
