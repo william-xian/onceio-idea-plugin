@@ -95,12 +95,12 @@
   </extensions>
 
   <actions>
-    <!-- Add your actions here -->
+    <!--
+     -->
     <action id="GenerateModelAction" class="top.onceio.plugins.GenerateModelAction" text="GenerateMeta">
       <add-to-group group-id="GenerateGroup" anchor="first"/>
       <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt G"/>
     </action>
-
   </actions>
 
 </idea-plugin>

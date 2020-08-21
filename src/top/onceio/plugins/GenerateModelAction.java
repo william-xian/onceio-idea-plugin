@@ -20,7 +20,6 @@ public class GenerateModelAction extends AnAction {
         PsiFile psiFile = event.getData(CommonDataKeys.PSI_FILE);
         StringBuilder message = new StringBuilder();
         message.append(psiFile.getVirtualFile().getPath() + "\n");
-        String title = "Hello World!";
         Editor editor = event.getData(CommonDataKeys.EDITOR);
         Document doc = editor.getDocument();
         StringBuilder text = new StringBuilder(doc.getText());
@@ -28,7 +27,6 @@ public class GenerateModelAction extends AnAction {
         PsiImportList importList = null;
         PsiClass psiClass = null;
         for (PsiElement element : psiFile.getChildren()) {
-            System.out.println(element.getClass() + ":" + element.getText());
             if (PsiClass.class.isAssignableFrom(element.getClass())) {
                 psiClass = (PsiClass) element;
             }
@@ -46,8 +44,6 @@ public class GenerateModelAction extends AnAction {
 
         int metaIndex = psiClass.getTextRange().getEndOffset() - 2;
         text.insert(metaIndex, model.toString());
-        int endO = importList.getTextRange().getEndOffset();
-        text.insert(endO, TableModel.IMPORTS);
         doc.setText(text);
 
     }

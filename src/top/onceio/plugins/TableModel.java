@@ -4,18 +4,18 @@ package top.onceio.plugins;
 import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiField;
+import top.onceio.core.db.model.BaseTable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class TableModel {
-    public static final String IMPORTS = "\nimport top.onceio.core.db.model.*;\nimport top.onceio.core.util.OReflectUtil;";
     private static final String TPL =
-            "\n    public static class Meta extends %s.Meta<Meta>  {\n" +
+            "\n    public static class Meta extends " + BaseTable.class.getName() + "<Meta>  {\n" +
                     "%s\n" +
                     "        public Meta() {\n" +
-                    "            super(\"%s\");\n" +
-                    "            super.bind(this, %s.class);\n" +
+                    "            super.bind(\"%s\",this, %s.class);\n" +
                     "        }\n" +
                     "    }\n" +
                     "    public static Meta meta() {\n" +
@@ -23,19 +23,16 @@ public class TableModel {
                     "    }\n";
 
     private static final String TPL_FIELD =
-            "        public %sCol<Meta> %s = new %sCol(this, OReflectUtil.getField(%s.class, \"%s\"));";
+            "        public %sCol<Meta> %s = new %sCol(this, top.onceio.core.util.OReflectUtil.getField(%s.class, \"%s\"));";
 
-    private String superClass;
     private String tableName;
     private String className;
     private List<String> fields = new ArrayList<>();
 
     private String pkg;
-    private List<String> imports;
 
-    public TableModel(String className, String superClass, String tableName) {
+    public TableModel(String className, String tableName) {
         this.className = className;
-        this.superClass = superClass;
         this.tableName = tableName;
     }
 
@@ -45,7 +42,7 @@ public class TableModel {
 
     @Override
     public String toString() {
-        return String.format(TPL, superClass, String.join("\n", fields), tableName, className);
+        return String.format(TPL, String.join("\n", fields), tableName, className);
     }
 
 
@@ -53,7 +50,7 @@ public class TableModel {
         PsiAnnotation tbl = psiClass.getAnnotation("top.onceio.core.db.annotation.Tbl");
         String table;
         if (tbl != null) {
-            table = tbl.findAttributeValue("name").getText().replace("\"", "").toLowerCase().replace("public.","");
+            table = tbl.findAttributeValue("name").getText().replace("\"", "").toLowerCase().replace("public.", "");
         } else {
             return null;
         }
@@ -63,16 +60,24 @@ public class TableModel {
                 table = table.substring(1);
             }
         }
-        TableModel model = new TableModel(psiClass.getName(), psiClass.getSuperClass().getName(), table);
-        for (PsiField psiField : psiClass.getFields()) {
-            PsiAnnotation col = psiField.getAnnotation("top.onceio.core.db.annotation.Col");
-            if (col == null) continue;
-            String modelType = "Base";
-            if (psiField.getType().getCanonicalText().equals("java.lang.String")) {
-                modelType = "String";
+        TableModel model = new TableModel(psiClass.getName(), table);
+
+        List<PsiClass> classList = new ArrayList<>();
+        for (PsiClass cur = psiClass; cur != null && !cur.getName().equals(Object.class); cur = cur.getSuperClass()) {
+            classList.add(0, cur);
+        }
+
+        for (PsiClass cur:classList) {
+            for (PsiField psiField : cur.getFields()) {
+                PsiAnnotation col = psiField.getAnnotation("top.onceio.core.db.annotation.Col");
+                if (col == null) continue;
+                String modelType = "top.onceio.core.db.model.Base";
+                if (psiField.getType().getCanonicalText().equals("java.lang.String")) {
+                    modelType = "top.onceio.core.db.model.String";
+                }
+                String fieldName = psiField.getName();
+                model.appendField(modelType, fieldName);
             }
-            String fieldName = psiField.getName();
-            model.appendField(modelType, fieldName);
         }
         return model;
     }
