@@ -3,12 +3,14 @@ package top.onceio.plugins.handler;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
+import com.intellij.psi.impl.file.impl.JavaFileManager;
 import de.plushnikov.intellij.plugin.problem.ProblemBuilder;
 import de.plushnikov.intellij.plugin.psi.LombokLightClassBuilder;
 import de.plushnikov.intellij.plugin.psi.LombokLightMethodBuilder;
 import de.plushnikov.intellij.plugin.util.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import top.onceio.core.db.model.BaseTable;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -98,7 +100,6 @@ public class TblHandler {
         final String builderClassName = getBuilderClassName(psiClass, psiAnnotation, psiMethod);
         return PsiClassUtil.getInnerClassInternByName(psiClass, builderClassName);
     }
-
 
 
     @NotNull
@@ -193,8 +194,16 @@ public class TblHandler {
         if (null != psiClassMethod) {
             result = Arrays.stream(psiClassMethod.getParameterList().getParameters()).map(TaleMetaInfo::fromPsiParameter);
         } else {
+            /*
             result = PsiClassUtil.collectClassFieldsIntern(psiClass).stream().map(TaleMetaInfo::fromPsiField)
                     .filter(TaleMetaInfo::useForBuilder);
+            */
+            Stream<TaleMetaInfo> all = Stream.empty();
+            for (PsiClass cur = psiClass; cur != null && !cur.getName().equals(Object.class.getName()); cur = cur.getSuperClass()) {
+                all = Stream.concat(all, PsiClassUtil.collectClassFieldsIntern(cur).stream().map(TaleMetaInfo::fromPsiField)
+                        .filter(TaleMetaInfo::useForBuilder));
+            }
+            result = all;
 
         }
 
@@ -202,7 +211,7 @@ public class TblHandler {
     }
 
     public List<TaleMetaInfo> createTableMetaInfos(@NotNull PsiAnnotation psiAnnotation, @NotNull PsiClass psiClass,
-                                                 @Nullable PsiMethod psiClassMethod, @NotNull PsiClass builderClass) {
+                                                   @Nullable PsiMethod psiClassMethod, @NotNull PsiClass builderClass) {
         final PsiSubstitutor builderSubstitutor = getBuilderSubstitutor(psiClass, builderClass);
         final String accessVisibility = getBuilderInnerAccessVisibility(psiAnnotation);
         final String setterPrefix = getSetterPrefix(psiAnnotation);
@@ -230,19 +239,12 @@ public class TblHandler {
         }
         final List<TaleMetaInfo> taleMetaInfos = createTableMetaInfos(psiAnnotation, psiClass, psiMethod, builderClass);
 
-        final PsiClass superClass = psiClass.getSuperClass();
-        if (null != superClass && !"Object".equals(superClass.getName())) {
-            final PsiClass parentBuilderClass = superClass.findInnerClassByName(getBuilderClassName(superClass), false);
-            if (null != parentBuilderClass) {
-                PsiType psiClassType = taleMetaInfos.stream().findFirst().get().getBuilderType();
-                final PsiClassType extendsType = getTypeWithSpecificTypeParameters(parentBuilderClass, psiClassType);
-
-                builderClass.withExtends(extendsType);
-            }
-        }
+        final PsiClass parentBuilderClass = JavaFileManager.getInstance(psiClass.getProject()).findClass(BaseTable.class.getName(), psiClass.getResolveScope());
+        PsiType psiClassType = taleMetaInfos.stream().findFirst().get().getBuilderType();
+        final PsiClassType extendsType = getTypeWithSpecificTypeParameters(parentBuilderClass, psiClassType);
+        builderClass.withExtends(extendsType);
 
         builderClass.withMethods(createConstructors(builderClass, psiAnnotation));
-
 
         // create builder Fields
         taleMetaInfos.stream()
@@ -259,7 +261,6 @@ public class TblHandler {
         final int substituteTypesCount = psiTypes.length;
         if (classTypeParameters.length >= substituteTypesCount) {
             PsiSubstitutor newSubstitutor = PsiSubstitutor.EMPTY;
-
             final int fromIndex = classTypeParameters.length - substituteTypesCount;
             for (int i = 0; i < fromIndex; i++) {
                 newSubstitutor = newSubstitutor.put(classTypeParameters[i], elementFactory.createType(classTypeParameters[i]));
@@ -271,6 +272,7 @@ public class TblHandler {
         }
         return elementFactory.createType(psiClass);
     }
+
     @NotNull
     private LombokLightClassBuilder createEmptyBuilderClass(@NotNull PsiClass psiClass, @NotNull PsiMethod psiMethod, @NotNull PsiAnnotation psiAnnotation) {
         return createBuilderClass(psiClass, psiMethod,
