@@ -7,7 +7,6 @@ import com.intellij.psi.PsiField;
 import top.onceio.core.db.model.BaseTable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class TableModel {
@@ -28,8 +27,6 @@ public class TableModel {
     private String tableName;
     private String className;
     private List<String> fields = new ArrayList<>();
-
-    private String pkg;
 
     public TableModel(String className, String tableName) {
         this.className = className;
