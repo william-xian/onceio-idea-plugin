@@ -1,4 +1,4 @@
-package top.onceio.plugins.processor.clazz.tbl;
+package top.onceio.plugins.processor.clazz.model;
 
 
 import com.intellij.psi.PsiAnnotation;
@@ -10,9 +10,9 @@ import de.plushnikov.intellij.plugin.util.PsiClassUtil;
 import lombok.experimental.Tolerate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import top.onceio.core.db.annotation.Tbl;
+import top.onceio.core.db.annotation.Model;
 import top.onceio.plugins.handler.TaleMetaInfo;
-import top.onceio.plugins.handler.TblHandler;
+import top.onceio.plugins.handler.ModelHandler;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,10 +24,10 @@ import java.util.stream.Collectors;
  *
  * @author Michail Plushnikov
  */
-public class TblPreDefinedInnerClassMethodProcessor extends AbstractTblPreDefinedInnerClassProcessor {
+public class ModelPreDefinedInnerClassMethodProcessor extends AbstractModelPreDefinedInnerClassProcessor {
 
-    public TblPreDefinedInnerClassMethodProcessor(@NotNull TblHandler tblHandler) {
-        super(tblHandler, PsiMethod.class, Tbl.class);
+    public ModelPreDefinedInnerClassMethodProcessor(@NotNull ModelHandler modelHandler) {
+        super(modelHandler, PsiMethod.class, Model.class);
     }
 
     protected Collection<? extends PsiElement> generatePsiElements(@NotNull PsiClass psiParentClass, @Nullable PsiMethod psiParentMethod, @NotNull PsiAnnotation psiAnnotation, @NotNull PsiClass psiBuilderClass) {
@@ -37,10 +37,10 @@ public class TblPreDefinedInnerClassMethodProcessor extends AbstractTblPreDefine
                 .filter(psiMethod -> PsiAnnotationSearchUtil.isNotAnnotatedWith(psiMethod, Tolerate.class))
                 .map(PsiMethod::getName).collect(Collectors.toSet());
 
-        final List<TaleMetaInfo> taleMetaInfos = tblHandler.createTableMetaInfos(psiAnnotation, psiParentClass, psiParentMethod, psiBuilderClass);
+        final List<TaleMetaInfo> taleMetaInfos = modelHandler.createTableMetaInfos(psiAnnotation, psiParentClass, psiParentMethod, psiBuilderClass);
 
         //create constructor
-        result.addAll(tblHandler.createConstructors(psiBuilderClass, psiAnnotation));
+        result.addAll(modelHandler.createConstructors(psiBuilderClass, psiAnnotation));
 
         return result;
     }

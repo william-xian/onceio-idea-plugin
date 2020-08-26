@@ -13,7 +13,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MAVEN_REPOSITORY$/top/onceio/onceio-core/0.0.7/onceio-core-0.0.7.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/top/onceio/onceio-core/0.0.8/onceio-core-0.0.8.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

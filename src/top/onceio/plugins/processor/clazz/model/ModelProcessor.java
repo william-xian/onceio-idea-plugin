@@ -1,4 +1,4 @@
-package top.onceio.plugins.processor.clazz.tbl;
+package top.onceio.plugins.processor.clazz.model;
 
 
 import com.intellij.ide.util.PropertiesComponent;
@@ -9,8 +9,8 @@ import de.plushnikov.intellij.plugin.processor.clazz.AbstractClassProcessor;
 import lombok.Builder;
 import lombok.Singular;
 import org.jetbrains.annotations.NotNull;
-import top.onceio.core.db.annotation.Tbl;
-import top.onceio.plugins.handler.TblHandler;
+import top.onceio.core.db.annotation.Model;
+import top.onceio.plugins.handler.ModelHandler;
 import top.onceio.plugins.settings.ProjectSettings;
 
 import java.util.Collection;
@@ -23,15 +23,15 @@ import java.util.List;
  * @author Tomasz Kalkosiński
  * @author Michail Plushnikov
  */
-public class TblProcessor extends AbstractClassProcessor {
+public class ModelProcessor extends AbstractClassProcessor {
 
     static final String SINGULAR_CLASS = Singular.class.getName();
     static final String BUILDER_DEFAULT_CLASS = Builder.Default.class.getCanonicalName();
 
-    private final TblHandler builderHandler;
+    private final ModelHandler builderHandler;
 
-    public TblProcessor(@NotNull TblHandler builderHandler) {
-        super(PsiMethod.class, Tbl.class);
+    public ModelProcessor(@NotNull ModelHandler builderHandler) {
+        super(PsiMethod.class, Model.class);
         this.builderHandler = builderHandler;
     }
 

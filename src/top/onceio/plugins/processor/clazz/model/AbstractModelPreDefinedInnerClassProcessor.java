@@ -1,4 +1,4 @@
-package top.onceio.plugins.processor.clazz.tbl;
+package top.onceio.plugins.processor.clazz.model;
 
 
 import com.intellij.ide.util.PropertiesComponent;
@@ -14,21 +14,21 @@ import de.plushnikov.intellij.plugin.util.PsiAnnotationSearchUtil;
 import de.plushnikov.intellij.plugin.util.PsiClassUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import top.onceio.plugins.handler.TblHandler;
+import top.onceio.plugins.handler.ModelHandler;
 import top.onceio.plugins.settings.ProjectSettings;
 
 import java.lang.annotation.Annotation;
 import java.util.*;
 
-public abstract class AbstractTblPreDefinedInnerClassProcessor extends AbstractClassProcessor {
+public abstract class AbstractModelPreDefinedInnerClassProcessor extends AbstractClassProcessor {
 
-    final TblHandler tblHandler;
+    final ModelHandler modelHandler;
 
-    AbstractTblPreDefinedInnerClassProcessor(@NotNull TblHandler tblHandler,
-                                                 @NotNull Class<? extends PsiElement> supportedClass,
-                                                 @NotNull Class<? extends Annotation> supportedAnnotationClass) {
+    AbstractModelPreDefinedInnerClassProcessor(@NotNull ModelHandler modelHandler,
+                                               @NotNull Class<? extends PsiElement> supportedClass,
+                                               @NotNull Class<? extends Annotation> supportedAnnotationClass) {
         super(supportedClass, supportedAnnotationClass);
-        this.tblHandler = tblHandler;
+        this.modelHandler = modelHandler;
     }
 
     @Override
@@ -64,7 +64,7 @@ public abstract class AbstractTblPreDefinedInnerClassProcessor extends AbstractC
     private List<? super PsiElement> processAnnotation(@NotNull PsiClass psiParentClass, @Nullable PsiMethod psiParentMethod,
                                                        @NotNull PsiAnnotation psiAnnotation, @NotNull PsiClass psiClass) {
         // use parent class as source!
-        final String builderClassName = tblHandler.getBuilderClassName(psiParentClass, psiAnnotation, psiParentMethod);
+        final String builderClassName = modelHandler.getBuilderClassName(psiParentClass, psiAnnotation, psiParentMethod);
 
         List<? super PsiElement> result = new ArrayList<>();
         // apply only to inner BuilderClass
@@ -85,7 +85,7 @@ public abstract class AbstractTblPreDefinedInnerClassProcessor extends AbstractC
 
     @Override
     protected boolean validate(@NotNull PsiAnnotation psiAnnotation, @NotNull PsiClass psiClass, @NotNull ProblemBuilder builder) {
-        return tblHandler.validate(psiClass, psiAnnotation, builder);
+        return modelHandler.validate(psiClass, psiAnnotation, builder);
     }
 
     @Override

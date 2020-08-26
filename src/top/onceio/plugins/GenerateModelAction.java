@@ -39,12 +39,14 @@ public class GenerateModelAction extends AnAction {
         if (model != null) {
             message.append(model.toString());
         } else {
-            message.append("必须添加Tbl注解");
+            message.append("必须添加Model注解");
         }
 
         int metaIndex = psiClass.getTextRange().getEndOffset() - 2;
-        text.insert(metaIndex, model.toString());
+        String meta = model.toString();
+        text.insert(metaIndex, meta);
         doc.setText(text);
 
     }
+
 }

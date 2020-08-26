@@ -26,14 +26,14 @@
     <postStartupActivity implementation="top.onceio.plugins.activity.OnceIOProjectValidatorActivity"/>
 
     <applicationService
-            serviceImplementation="top.onceio.plugins.handler.TblHandler"/>
+            serviceImplementation="top.onceio.plugins.handler.ModelHandler"/>
 
 
     <!-- Start of lombok Processors-->
-    <applicationService serviceImplementation="top.onceio.plugins.processor.clazz.tbl.TblClassProcessor"/>
-    <applicationService serviceImplementation="top.onceio.plugins.processor.clazz.tbl.TblPreDefinedInnerClassFieldProcessor"/>
-    <applicationService serviceImplementation="top.onceio.plugins.processor.clazz.tbl.TblPreDefinedInnerClassMethodProcessor"/>
-    <applicationService serviceImplementation="top.onceio.plugins.processor.clazz.tbl.TblProcessor"/>
+    <applicationService serviceImplementation="top.onceio.plugins.processor.clazz.model.ModelClassProcessor"/>
+    <applicationService serviceImplementation="top.onceio.plugins.processor.clazz.model.ModelPreDefinedInnerClassFieldProcessor"/>
+    <applicationService serviceImplementation="top.onceio.plugins.processor.clazz.model.ModelPreDefinedInnerClassMethodProcessor"/>
+    <applicationService serviceImplementation="top.onceio.plugins.processor.clazz.model.ModelProcessor"/>
 
     <projectService serviceImplementation="top.onceio.plugins.provider.OnceIOProcessorProvider"/>
     <!-- END of lombok Processors-->

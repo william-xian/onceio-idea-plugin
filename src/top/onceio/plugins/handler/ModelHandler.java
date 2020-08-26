@@ -10,7 +10,7 @@ import de.plushnikov.intellij.plugin.psi.LombokLightMethodBuilder;
 import de.plushnikov.intellij.plugin.util.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import top.onceio.core.db.model.BaseTable;
+import top.onceio.core.db.model.BaseMeta;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -23,7 +23,7 @@ import java.util.stream.Stream;
  * @author Tomasz Kalkosiński
  * @author Michail Plushnikov
  */
-public class TblHandler {
+public class ModelHandler {
     private final static String ANNOTATION_TABLE_META_CLASS_NAME = "tableMetaClassName";
     private static final String ANNOTATION_META_METHOD_NAME = "metaMethodName";
     private static final String ANNOTATION_SETTER_PREFIX = "setterPrefix";
@@ -32,7 +32,7 @@ public class TblHandler {
 
     private static final Collection<String> INVALID_ON_BUILDERS = Collections.unmodifiableSet(new HashSet<>());
 
-    public TblHandler() {
+    public ModelHandler() {
     }
 
     PsiSubstitutor getBuilderSubstitutor(@NotNull PsiTypeParameterListOwner classOrMethodToBuild, @NotNull PsiClass innerClass) {
@@ -239,7 +239,7 @@ public class TblHandler {
         }
         final List<TaleMetaInfo> taleMetaInfos = createTableMetaInfos(psiAnnotation, psiClass, psiMethod, builderClass);
 
-        final PsiClass parentBuilderClass = JavaFileManager.getInstance(psiClass.getProject()).findClass(BaseTable.class.getName(), psiClass.getResolveScope());
+        final PsiClass parentBuilderClass = JavaFileManager.getInstance(psiClass.getProject()).findClass(BaseMeta.class.getName(), psiClass.getResolveScope());
         PsiType psiClassType = taleMetaInfos.stream().findFirst().get().getBuilderType();
         final PsiClassType extendsType = getTypeWithSpecificTypeParameters(parentBuilderClass, psiClassType);
         builderClass.withExtends(extendsType);

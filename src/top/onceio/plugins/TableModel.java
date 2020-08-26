@@ -4,14 +4,18 @@ package top.onceio.plugins;
 import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiField;
-import top.onceio.core.db.model.BaseTable;
+import top.onceio.core.db.annotation.Col;
+import top.onceio.core.db.annotation.Model;
+import top.onceio.core.db.model.BaseCol;
+import top.onceio.core.db.model.BaseMeta;
+import top.onceio.core.db.model.StringCol;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class TableModel {
     private static final String TPL =
-            "\n    public static class Meta extends " + BaseTable.class.getName() + "<Meta>  {\n" +
+            "\n    public static class Meta extends " + BaseMeta.class.getName() + "<Meta>  {\n" +
                     "%s\n" +
                     "        public Meta() {\n" +
                     "            super.bind(\"%s\",this, %s.class);\n" +
@@ -22,7 +26,7 @@ public class TableModel {
                     "    }\n";
 
     private static final String TPL_FIELD =
-            "        public %sCol<Meta> %s = new %sCol(this, top.onceio.core.util.OReflectUtil.getField(%s.class, \"%s\"));";
+            "        public %s<Meta> %s = new %s(this, top.onceio.core.util.OReflectUtil.getField(%s.class, \"%s\"));";
 
     private String tableName;
     private String className;
@@ -44,7 +48,7 @@ public class TableModel {
 
 
     public static TableModel parse(PsiClass psiClass) {
-        PsiAnnotation tbl = psiClass.getAnnotation("top.onceio.core.db.annotation.Tbl");
+        PsiAnnotation tbl = psiClass.getAnnotation(Model.class.getName());
         String table;
         if (tbl != null) {
             table = tbl.findAttributeValue("name").getText().replace("\"", "").toLowerCase().replace("public.", "");
@@ -66,11 +70,12 @@ public class TableModel {
 
         for (PsiClass cur:classList) {
             for (PsiField psiField : cur.getFields()) {
-                PsiAnnotation col = psiField.getAnnotation("top.onceio.core.db.annotation.Col");
+                PsiAnnotation col = psiField.getAnnotation(Col.class.getName());
                 if (col == null) continue;
-                String modelType = "top.onceio.core.db.model.Base";
+                String modelType = BaseCol.class.getName();
                 if (psiField.getType().getCanonicalText().equals("java.lang.String")) {
-                    modelType = "top.onceio.core.db.model.String";
+                    modelType = StringCol.class.getName();
+
                 }
                 String fieldName = psiField.getName();
                 model.appendField(modelType, fieldName);
