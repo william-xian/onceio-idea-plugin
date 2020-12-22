@@ -45,7 +45,7 @@
     <lang.psiAugmentProvider implementation="top.onceio.plugins.provider.OnceIOAugmentProvider"/>
     <implicitUsageProvider implementation="top.onceio.plugins.provider.OnceIOImplicitUsageProvider"/>
 
-
+<!--
 
     <treeGenerator implementation="de.plushnikov.intellij.plugin.extension.LombokLightMethodTreeGenerator"/>
 
@@ -82,6 +82,10 @@
     <canBeFinal implementation="de.plushnikov.intellij.plugin.extension.LombokCanBeFinalHandler"/>
 
 
+    <codeInsight.template.postfixTemplateProvider language="JAVA"
+                                                  implementationClass="de.plushnikov.intellij.plugin.extension.postfix.LombokPostfixTemplateProvider"/>
+    -->
+
     <localInspection
             displayName="OnceIO annotations"
             groupName="OnceIOPlugin"
@@ -89,9 +93,6 @@
             enabledByDefault="true"
             implementationClass="top.onceio.plugins.inspection.OnceIOInspection"/>
 
-
-    <codeInsight.template.postfixTemplateProvider language="JAVA"
-                                                  implementationClass="de.plushnikov.intellij.plugin.extension.postfix.LombokPostfixTemplateProvider"/>
   </extensions>
 
   <actions>
