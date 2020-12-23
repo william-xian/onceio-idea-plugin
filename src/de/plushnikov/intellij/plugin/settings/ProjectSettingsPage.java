@@ -3,7 +3,7 @@ package de.plushnikov.intellij.plugin.settings;
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.SearchableConfigurable;
-import de.plushnikov.intellij.plugin.Version;
+import top.onceio.plugins.Version;
 import de.plushnikov.intellij.plugin.provider.LombokProcessorProvider;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;

@@ -5,7 +5,7 @@ import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiField;
-import de.plushnikov.intellij.plugin.problem.LombokProblem;
+import top.onceio.plugins.problem.LombokProblem;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.Annotation;

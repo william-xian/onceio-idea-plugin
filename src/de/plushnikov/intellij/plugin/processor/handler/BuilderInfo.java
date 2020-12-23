@@ -7,7 +7,7 @@ import com.intellij.psi.impl.PsiImplUtil;
 import com.intellij.psi.impl.source.PsiClassReferenceType;
 import de.plushnikov.intellij.plugin.processor.field.AccessorsInfo;
 import de.plushnikov.intellij.plugin.processor.handler.singular.BuilderElementHandler;
-import de.plushnikov.intellij.plugin.thirdparty.LombokUtils;
+import top.onceio.plugins.util.LombokUtils;
 import top.onceio.plugins.util.PsiAnnotationSearchUtil;
 import top.onceio.plugins.util.PsiAnnotationUtil;
 import top.onceio.plugins.util.PsiClassUtil;

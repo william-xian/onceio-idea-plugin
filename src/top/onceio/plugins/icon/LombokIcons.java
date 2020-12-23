@@ -1,4 +1,4 @@
-package de.plushnikov.intellij.plugin.icon;
+package top.onceio.plugins.icon;
 
 import com.intellij.openapi.util.IconLoader;
 

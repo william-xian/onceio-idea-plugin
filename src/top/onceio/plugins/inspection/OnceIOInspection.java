@@ -4,11 +4,10 @@ package top.onceio.plugins.inspection;
 import com.intellij.codeInspection.AbstractBaseJavaLocalInspectionTool;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.psi.*;
-import de.plushnikov.intellij.plugin.problem.LombokProblem;
+import top.onceio.plugins.problem.LombokProblem;
 import de.plushnikov.intellij.plugin.processor.Processor;
-import de.plushnikov.intellij.plugin.psi.LombokLightMethodBuilder;
+import top.onceio.plugins.psi.LombokLightMethodBuilder;
 import org.jetbrains.annotations.NotNull;
 import top.onceio.plugins.provider.OnceIOProcessorProvider;
 

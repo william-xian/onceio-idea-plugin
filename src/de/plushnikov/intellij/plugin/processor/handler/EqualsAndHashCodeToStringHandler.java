@@ -8,7 +8,7 @@ import com.intellij.psi.PsiMember;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiModifier;
 import com.intellij.psi.PsiType;
-import de.plushnikov.intellij.plugin.thirdparty.LombokUtils;
+import top.onceio.plugins.util.LombokUtils;
 import top.onceio.plugins.util.LombokProcessorUtil;
 import top.onceio.plugins.util.PsiAnnotationSearchUtil;
 import top.onceio.plugins.util.PsiAnnotationUtil;

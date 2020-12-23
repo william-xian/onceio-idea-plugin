@@ -1,4 +1,4 @@
-package de.plushnikov.intellij.plugin.quickfix;
+package top.onceio.plugins.quickfix;
 
 import com.intellij.codeInsight.CodeInsightUtil;
 import com.intellij.codeInsight.generation.GenerateMembersUtil;

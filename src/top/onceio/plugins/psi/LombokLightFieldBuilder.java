@@ -1,4 +1,4 @@
-package de.plushnikov.intellij.plugin.psi;
+package top.onceio.plugins.psi;
 
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.util.TextRange;
@@ -12,7 +12,7 @@ import com.intellij.psi.impl.CheckUtil;
 import com.intellij.psi.impl.light.LightFieldBuilder;
 import com.intellij.psi.impl.light.LightModifierList;
 import com.intellij.util.IncorrectOperationException;
-import de.plushnikov.intellij.plugin.icon.LombokIcons;
+import top.onceio.plugins.icon.LombokIcons;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 

@@ -10,7 +10,7 @@ import com.intellij.psi.PsiModifierList;
 import com.intellij.psi.util.PsiTreeUtil;
 import top.onceio.plugins.config.OnceIOConfigDiscovery;
 import top.onceio.plugins.config.ConfigKey;
-import de.plushnikov.intellij.plugin.psi.LombokLightFieldBuilder;
+import top.onceio.plugins.psi.LombokLightFieldBuilder;
 import top.onceio.plugins.util.LombokProcessorUtil;
 import top.onceio.plugins.util.PsiAnnotationSearchUtil;
 import top.onceio.plugins.util.PsiAnnotationUtil;

@@ -1,4 +1,4 @@
-package de.plushnikov.intellij.plugin.psi;
+package top.onceio.plugins.psi;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.java.JavaLanguage;
@@ -9,7 +9,7 @@ import com.intellij.psi.impl.light.LightMethodBuilder;
 import com.intellij.psi.impl.light.LightModifierList;
 import com.intellij.psi.impl.light.LightTypeParameterListBuilder;
 import com.intellij.util.IncorrectOperationException;
-import de.plushnikov.intellij.plugin.icon.LombokIcons;
+import top.onceio.plugins.icon.LombokIcons;
 import top.onceio.plugins.util.ReflectionUtil;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;

@@ -4,7 +4,7 @@ import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
-import de.plushnikov.intellij.plugin.problem.ProblemBuilder;
+import top.onceio.plugins.problem.ProblemBuilder;
 import top.onceio.plugins.processor.AbstractClassProcessor;
 import org.jetbrains.annotations.NotNull;
 import top.onceio.core.db.annotation.Model;

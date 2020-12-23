@@ -6,7 +6,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiModifier;
-import de.plushnikov.intellij.plugin.problem.ProblemBuilder;
+import top.onceio.plugins.problem.ProblemBuilder;
 import de.plushnikov.intellij.plugin.processor.LombokPsiElementUsage;
 import top.onceio.plugins.util.LombokProcessorUtil;
 import top.onceio.plugins.util.PsiClassUtil;

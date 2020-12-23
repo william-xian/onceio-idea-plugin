@@ -4,8 +4,8 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiElement;
 import com.intellij.refactoring.rename.RenamePsiElementProcessor;
-import de.plushnikov.intellij.plugin.psi.LombokLightFieldBuilder;
-import de.plushnikov.intellij.plugin.psi.LombokLightMethodBuilder;
+import top.onceio.plugins.psi.LombokLightFieldBuilder;
+import top.onceio.plugins.psi.LombokLightMethodBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

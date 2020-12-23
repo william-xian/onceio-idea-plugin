@@ -9,7 +9,7 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.PathUtil;
 import com.intellij.util.indexing.FileBasedIndex;
-import de.plushnikov.intellij.plugin.psi.LombokLightClassBuilder;
+import top.onceio.plugins.psi.LombokLightClassBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

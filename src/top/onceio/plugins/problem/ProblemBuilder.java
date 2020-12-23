@@ -1,4 +1,4 @@
-package de.plushnikov.intellij.plugin.problem;
+package top.onceio.plugins.problem;
 
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemHighlightType;

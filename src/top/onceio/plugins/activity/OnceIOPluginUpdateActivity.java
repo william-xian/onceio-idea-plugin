@@ -4,8 +4,8 @@ import com.intellij.notification.*;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.startup.StartupActivity;
-import de.plushnikov.intellij.plugin.LombokBundle;
-import de.plushnikov.intellij.plugin.Version;
+import top.onceio.plugins.LombokBundle;
+import top.onceio.plugins.Version;
 import org.jetbrains.annotations.NotNull;
 import top.onceio.plugins.settings.OnceIOSettings;
 

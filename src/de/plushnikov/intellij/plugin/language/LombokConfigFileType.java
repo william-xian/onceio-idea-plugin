@@ -1,7 +1,7 @@
 package de.plushnikov.intellij.plugin.language;
 
 import com.intellij.openapi.fileTypes.LanguageFileType;
-import de.plushnikov.intellij.plugin.icon.LombokIcons;
+import top.onceio.plugins.icon.LombokIcons;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

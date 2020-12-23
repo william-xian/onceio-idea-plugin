@@ -9,7 +9,7 @@ import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.RecursionManager;
 import com.intellij.psi.*;
 import com.intellij.psi.util.TypeConversionUtil;
-import de.plushnikov.intellij.plugin.problem.LombokProblem;
+import top.onceio.plugins.problem.LombokProblem;
 import de.plushnikov.intellij.plugin.settings.ProjectSettings;
 import lombok.val;
 import org.jetbrains.annotations.NotNull;

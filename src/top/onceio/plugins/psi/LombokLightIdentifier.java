@@ -1,4 +1,4 @@
-package de.plushnikov.intellij.plugin.psi;
+package top.onceio.plugins.psi;
 
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;

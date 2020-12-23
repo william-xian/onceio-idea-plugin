@@ -1,4 +1,4 @@
-package de.plushnikov.intellij.plugin;
+package top.onceio.plugins;
 
 import com.intellij.AbstractBundle;
 import org.jetbrains.annotations.NonNls;

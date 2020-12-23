@@ -1,4 +1,4 @@
-package de.plushnikov.intellij.plugin.psi;
+package top.onceio.plugins.psi;
 
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiClass;
@@ -13,7 +13,7 @@ import com.intellij.psi.PsiTypeParameterList;
 import com.intellij.psi.impl.light.LightFieldBuilder;
 import com.intellij.psi.impl.light.LightPsiClassBuilder;
 import com.intellij.psi.impl.source.PsiExtensibleClass;
-import de.plushnikov.intellij.plugin.icon.LombokIcons;
+import top.onceio.plugins.icon.LombokIcons;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

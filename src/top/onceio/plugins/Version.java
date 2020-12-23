@@ -1,4 +1,13 @@
 package top.onceio.plugins;
 
-public class Version {
+public interface Version {
+  String PLUGIN_NAME = "Lombok plugin";
+  /**
+   * Current plugin version.
+   */
+  String PLUGIN_VERSION = "0.30";
+  /**
+   * Current version of lombok plugin
+   */
+  String LAST_LOMBOK_VERSION = "1.18.12";
 }

@@ -3,7 +3,7 @@ package top.onceio.plugins.processor.clazz.model;
 
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.psi.*;
-import de.plushnikov.intellij.plugin.problem.ProblemBuilder;
+import top.onceio.plugins.problem.ProblemBuilder;
 import de.plushnikov.intellij.plugin.processor.LombokPsiElementUsage;
 import lombok.Builder;
 import lombok.Singular;

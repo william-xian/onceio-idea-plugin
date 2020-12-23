@@ -7,7 +7,7 @@ import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiClass;
 import top.onceio.plugins.config.OnceIOConfigDiscovery;
 import top.onceio.plugins.config.ConfigKey;
-import de.plushnikov.intellij.plugin.problem.ProblemBuilder;
+import top.onceio.plugins.problem.ProblemBuilder;
 import de.plushnikov.intellij.plugin.processor.clazz.log.CustomLogParser.LoggerInitializerDeclaration;
 import top.onceio.plugins.util.PsiAnnotationUtil;
 import lombok.CustomLog;

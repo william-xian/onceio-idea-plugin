@@ -1,4 +1,4 @@
-package de.plushnikov.intellij.plugin.thirdparty;
+package top.onceio.plugins.util;
 
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiField;
