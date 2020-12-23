@@ -28,8 +28,8 @@ public class OnceIOProcessorProvider {
 
     private final PropertiesComponent myPropertiesComponent;
 
-    private final Map<Class, Collection<Processor>> lombokTypeProcessors;
-    private final Map<String, Collection<Processor>> lombokProcessors;
+    private final Map<Class, Collection<Processor>> onceioTypeProcessors;
+    private final Map<String, Collection<Processor>> onceioProcessors;
     private final Collection<String> registeredAnnotationNames;
 
     private boolean alreadyInitialized;
@@ -37,8 +37,8 @@ public class OnceIOProcessorProvider {
     public OnceIOProcessorProvider(@NotNull PropertiesComponent propertiesComponent) {
         myPropertiesComponent = propertiesComponent;
 
-        lombokProcessors = new ConcurrentHashMap<>();
-        lombokTypeProcessors = new ConcurrentHashMap<>();
+        onceioProcessors = new ConcurrentHashMap<>();
+        onceioTypeProcessors = new ConcurrentHashMap<>();
         registeredAnnotationNames = ConcurrentHashMap.newKeySet();
     }
 
@@ -50,8 +50,8 @@ public class OnceIOProcessorProvider {
     }
 
     public void initProcessors() {
-        lombokProcessors.clear();
-        lombokTypeProcessors.clear();
+        onceioProcessors.clear();
+        onceioTypeProcessors.clear();
         registeredAnnotationNames.clear();
 
         for (Processor processor : OnceIOProcessorManager.getOnceIOProcessors()) {
@@ -59,26 +59,26 @@ public class OnceIOProcessorProvider {
 
                 Class<? extends Annotation>[] annotationClasses = processor.getSupportedAnnotationClasses();
                 for (Class<? extends Annotation> annotationClass : annotationClasses) {
-                    putProcessor(lombokProcessors, annotationClass.getName(), processor);
-                    putProcessor(lombokProcessors, annotationClass.getSimpleName(), processor);
+                    putProcessor(onceioProcessors, annotationClass.getName(), processor);
+                    putProcessor(onceioProcessors, annotationClass.getSimpleName(), processor);
                 }
 
-                putProcessor(lombokTypeProcessors, processor.getSupportedClass(), processor);
+                putProcessor(onceioTypeProcessors, processor.getSupportedClass(), processor);
             }
         }
 
-        registeredAnnotationNames.addAll(lombokProcessors.keySet());
+        registeredAnnotationNames.addAll(onceioProcessors.keySet());
     }
 
     @NotNull
     Collection<Processor> getOnceIOProcessors(@NotNull Class supportedClass) {
-        return lombokTypeProcessors.computeIfAbsent(supportedClass, k -> ConcurrentHashMap.newKeySet());
+        return onceioTypeProcessors.computeIfAbsent(supportedClass, k -> ConcurrentHashMap.newKeySet());
     }
 
     @NotNull
     public Collection<Processor> getProcessors(@NotNull PsiAnnotation psiAnnotation) {
         final String qualifiedName = psiAnnotation.getQualifiedName();
-        final Collection<Processor> result = qualifiedName == null ? null : lombokProcessors.get(qualifiedName);
+        final Collection<Processor> result = qualifiedName == null ? null : onceioProcessors.get(qualifiedName);
         return result == null ? Collections.emptySet() : result;
     }
 

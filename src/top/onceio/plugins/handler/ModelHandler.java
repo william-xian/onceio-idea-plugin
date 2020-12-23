@@ -20,8 +20,8 @@ import java.util.stream.Stream;
 /**
  * Handler methods for Builder-processing
  *
- * @author Tomasz Kalkosiński
- * @author Michail Plushnikov
+ * @author Liar
+ * @author Liar
  */
 public class ModelHandler {
     private final static String ANNOTATION_TABLE_META_CLASS_NAME = "tableMetaClassName";

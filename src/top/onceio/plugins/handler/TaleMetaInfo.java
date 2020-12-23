@@ -12,7 +12,7 @@ import top.onceio.plugins.util.PsiClassUtil;
 import top.onceio.plugins.util.PsiTypeUtil;
 import org.jetbrains.annotations.NotNull;
 import top.onceio.core.db.annotation.Col;
-import top.onceio.plugins.processor.field.OnceIOAccessorsInfo;
+import top.onceio.plugins.processor.field.AccessorsInfo;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -68,7 +68,7 @@ public class TaleMetaInfo {
         result.fieldInitializer = psiField.getInitializer();
         result.hasBuilderDefaultAnnotation = false;
 
-        final OnceIOAccessorsInfo accessorsInfo = OnceIOAccessorsInfo.build(psiField);
+        final AccessorsInfo accessorsInfo = AccessorsInfo.build(psiField);
         result.fieldInBuilderName = accessorsInfo.removePrefix(psiField.getName());
         return result;
     }

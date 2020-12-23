@@ -14,7 +14,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * @author Plushnikov Michail
+ * @author Liar
  */
 public interface Processor {
   @NotNull

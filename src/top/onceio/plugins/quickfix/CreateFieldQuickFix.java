@@ -27,7 +27,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * @author Plushnikov Michail
+ * @author Liar
  */
 public class CreateFieldQuickFix extends LocalQuickFixOnPsiElement implements IntentionAction {
   private final String myName;

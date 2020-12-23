@@ -9,9 +9,8 @@ public class OnceIOIcons {
     return IconLoader.getIcon(path, OnceIOIcons.class);
   }
 
-  public static final Icon CLASS_ICON = load("/icons/nodes/lombokClass.png");
-  public static final Icon FIELD_ICON = load("/icons/nodes/lombokField.png");
-  public static final Icon METHOD_ICON = load("/icons/nodes/lombokMethod.png");
+  public static final Icon CLASS_ICON = load("/icons/nodes/onceioClass.png");
+  public static final Icon FIELD_ICON = load("/icons/nodes/onceioField.png");
+  public static final Icon METHOD_ICON = load("/icons/nodes/onceioMethod.png");
 
-  public static final Icon CONFIG_FILE_ICON = load("/icons/config.png");
 }

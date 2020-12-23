@@ -12,7 +12,7 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * @author Plushnikov Michail
+ * @author Liar
  */
 public class PsiMethodUtil {
   @NotNull

@@ -5,8 +5,6 @@ import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.psi.*;
 import top.onceio.plugins.problem.ProblemBuilder;
 import top.onceio.plugins.processor.OnceIOPsiElementUsage;
-import lombok.Builder;
-import lombok.Singular;
 import org.jetbrains.annotations.NotNull;
 import top.onceio.core.db.annotation.Model;
 import top.onceio.plugins.handler.ModelHandler;
@@ -17,16 +15,15 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Inspect and validate @Builder lombok annotation on a class.
+ * Inspect and validate @Builder onceio annotation on a class.
  * Creates methods for a builder pattern for initializing a class.
  *
- * @author Tomasz Kalkosiński
- * @author Michail Plushnikov
+ * @author Liar
+ * @author Liar
  */
 public class ModelProcessor extends AbstractClassProcessor {
 
-    static final String SINGULAR_CLASS = Singular.class.getName();
-    static final String BUILDER_DEFAULT_CLASS = Builder.Default.class.getCanonicalName();
+    static final String MODEL_CLASS = Model.class.getName();
 
     private final ModelHandler builderHandler;
 
@@ -44,7 +41,7 @@ public class ModelProcessor extends AbstractClassProcessor {
     @Override
     public Collection<PsiAnnotation> collectProcessedAnnotations(@NotNull PsiClass psiClass) {
         final Collection<PsiAnnotation> result = super.collectProcessedAnnotations(psiClass);
-        addFieldsAnnotation(result, psiClass, SINGULAR_CLASS, BUILDER_DEFAULT_CLASS);
+        addFieldsAnnotation(result, psiClass, MODEL_CLASS);
         return result;
     }
 

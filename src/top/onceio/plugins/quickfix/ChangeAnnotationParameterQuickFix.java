@@ -20,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 /**
- * @author Plushnikov Michail
+ * @author Liar
  */
 public class ChangeAnnotationParameterQuickFix extends LocalQuickFixOnPsiElement implements IntentionAction {
   private final String myName;

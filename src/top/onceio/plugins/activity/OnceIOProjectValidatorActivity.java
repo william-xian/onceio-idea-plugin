@@ -58,11 +58,11 @@ public class OnceIOProjectValidatorActivity implements StartupActivity {
         if (hasOnceIOLibrary && ProjectSettings.isEnabled(project, ProjectSettings.IS_ONCEIO_VERSION_CHECK_ENABLED, false)) {
             final ModuleManager moduleManager = ModuleManager.getInstance(project);
             for (Module module : moduleManager.getModules()) {
-                String lombokVersion = parseOnceIOVersion(findOnceIOEntry(ModuleRootManager.getInstance(module)));
+                String onceioVersion = parseOnceIOVersion(findOnceIOEntry(ModuleRootManager.getInstance(module)));
 
-                if (null != lombokVersion && compareVersionString(lombokVersion, Version.LAST_ONCEIO_VERSION) < 0) {
+                if (null != onceioVersion && compareVersionString(onceioVersion, Version.LAST_ONCEIO_VERSION) < 0) {
                     Notification notification = group.createNotification(OnceIOBundle.message("config.warn.dependency.outdated.title"),
-                            OnceIOBundle.message("config.warn.dependency.outdated.message", project.getName(), module.getName(), lombokVersion, Version.LAST_ONCEIO_VERSION),
+                            OnceIOBundle.message("config.warn.dependency.outdated.message", project.getName(), module.getName(), onceioVersion, Version.LAST_ONCEIO_VERSION),
                             NotificationType.WARNING, NotificationListener.URL_OPENING_LISTENER);
 
                     Notifications.Bus.notify(notification, project);
@@ -118,20 +118,20 @@ public class OnceIOProjectValidatorActivity implements StartupActivity {
     }
 
     private boolean hasOnceIOLibrary(Project project) {
-        PsiPackage lombokPackage;
+        PsiPackage onceioPackage;
         try {
-            lombokPackage = JavaPsiFacade.getInstance(project).findPackage("lombok");
+            onceioPackage = JavaPsiFacade.getInstance(project).findPackage("onceio");
         } catch (ProcessCanceledException ex) {
-            lombokPackage = null;
+            onceioPackage = null;
         }
-        return lombokPackage != null;
+        return onceioPackage != null;
     }
 
     @Nullable
     private OrderEntry findOnceIOEntry(@NotNull ModuleRootManager moduleRootManager) {
         final OrderEntry[] orderEntries = moduleRootManager.getOrderEntries();
         for (OrderEntry orderEntry : orderEntries) {
-            if (orderEntry.getPresentableName().contains("lombok")) {
+            if (orderEntry.getPresentableName().contains("onceio")) {
                 return orderEntry;
             }
         }

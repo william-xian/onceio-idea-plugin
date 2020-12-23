@@ -20,7 +20,7 @@ import java.util.Collections;
 import java.util.stream.Stream;
 
 /**
- * @author Plushnikov Michail
+ * @author Liar
  */
 public class OnceIOLightFieldBuilder extends LightFieldBuilder {
   private String myName;

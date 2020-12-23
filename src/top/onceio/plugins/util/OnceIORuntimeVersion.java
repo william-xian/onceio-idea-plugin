@@ -19,7 +19,7 @@ public class OnceIORuntimeVersion {
     List<VirtualFile> pathsFiles = ProjectRootManager.getInstance(project).orderEntries().withoutSdk().librariesOnly().getPathsList().getVirtualFiles();
     return pathsFiles.stream()
       .filter(file -> Objects.equals(file.getExtension(), "jar"))
-      .filter(file -> file.getNameWithoutExtension().contains("lombok-"))
+      .filter(file -> file.getNameWithoutExtension().contains("onceio-"))
       .map(VirtualFile::getNameWithoutExtension)
       .collect(Collectors.toSet());
   }

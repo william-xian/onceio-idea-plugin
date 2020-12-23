@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * @author Plushnikov Michail
+ * @author Liar
  */
 public class PsiClassUtil {
 

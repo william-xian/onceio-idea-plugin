@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * @author Plushnikov Michail
+ * @author Liar
  */
 public class OnceIOLightModifierList extends LightModifierList {
   private static final Set<String> ALL_MODIFIERS = new HashSet<>(Arrays.asList(PsiModifier.MODIFIERS));

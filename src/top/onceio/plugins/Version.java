@@ -7,7 +7,7 @@ public interface Version {
    */
   String PLUGIN_VERSION = "0.30";
   /**
-   * Current version of lombok plugin
+   * Current version of onceio plugin
    */
   String LAST_ONCEIO_VERSION = "1.18.12";
 }

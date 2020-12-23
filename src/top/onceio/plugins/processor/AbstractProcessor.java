@@ -1,22 +1,20 @@
 package top.onceio.plugins.processor;
 
 import com.intellij.psi.*;
-import lombok.experimental.Tolerate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import top.onceio.plugins.config.ConfigKey;
 import top.onceio.plugins.config.OnceIOConfigDiscovery;
 import top.onceio.plugins.util.OnceIOProcessorUtil;
-import top.onceio.plugins.util.PsiAnnotationSearchUtil;
 import top.onceio.plugins.util.PsiAnnotationUtil;
 
 import java.lang.annotation.Annotation;
 import java.util.Collection;
 
 /**
- * Base lombok processor class
+ * Base onceio processor class
  *
- * @author Plushnikov Michail
+ * @author Liar
  */
 public abstract class AbstractProcessor implements Processor {
   /**
@@ -28,7 +26,7 @@ public abstract class AbstractProcessor implements Processor {
    */
   private final Class<? extends PsiElement> supportedClass;
   /**
-   * Instance of config discovery service to access lombok.config informations
+   * Instance of config discovery service to access onceio.config informations
    */
   protected final OnceIOConfigDiscovery onceIOConfigDiscovery;
 
@@ -93,10 +91,6 @@ public abstract class AbstractProcessor implements Processor {
 
   protected boolean supportAnnotationVariant(@NotNull PsiAnnotation psiAnnotation) {
     return true;
-  }
-
-  protected void filterToleratedElements(@NotNull Collection<? extends PsiModifierListOwner> definedMethods) {
-    definedMethods.removeIf(definedMethod -> PsiAnnotationSearchUtil.isAnnotatedWith(definedMethod, Tolerate.class));
   }
 
   protected boolean readAnnotationOrConfigProperty(@NotNull PsiAnnotation psiAnnotation, @NotNull PsiClass psiClass,

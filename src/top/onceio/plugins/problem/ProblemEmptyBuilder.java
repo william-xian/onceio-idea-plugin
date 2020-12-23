@@ -4,7 +4,7 @@ import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemHighlightType;
 
 /**
- * @author Plushnikov Michail
+ * @author Liar
  */
 public class ProblemEmptyBuilder implements ProblemBuilder {
 

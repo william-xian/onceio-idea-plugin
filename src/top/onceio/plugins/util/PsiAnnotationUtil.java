@@ -15,8 +15,8 @@ import java.util.regex.Pattern;
 /**
  * Some util methods for annotation processing
  *
- * @author peichhorn
- * @author Plushnikov Michail
+ * @author Liar
+ * @author Liar
  */
 public class PsiAnnotationUtil {
 

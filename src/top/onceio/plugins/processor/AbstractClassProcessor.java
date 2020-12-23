@@ -1,44 +1,24 @@
 package top.onceio.plugins.processor;
 
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiAnnotation;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiModifier;
+import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
-import top.onceio.plugins.config.ConfigKey;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import top.onceio.plugins.problem.OnceIOProblem;
 import top.onceio.plugins.problem.ProblemBuilder;
 import top.onceio.plugins.problem.ProblemEmptyBuilder;
 import top.onceio.plugins.problem.ProblemNewBuilder;
-import top.onceio.plugins.processor.constructor.AbstractConstructorClassProcessor;
 import top.onceio.plugins.psi.OnceIOLightClassBuilder;
-import top.onceio.plugins.quickfix.PsiQuickFixFactory;
-import top.onceio.plugins.util.OnceIOUtils;
 import top.onceio.plugins.util.PsiAnnotationSearchUtil;
-import top.onceio.plugins.util.PsiAnnotationUtil;
 import top.onceio.plugins.util.PsiClassUtil;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.lang.annotation.Annotation;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
+import java.util.*;
 
 /**
- * Base lombok processor class for class annotations
+ * Base onceio processor class for class annotations
  *
- * @author Plushnikov Michail
+ * @author Liar
  */
 public abstract class AbstractClassProcessor extends AbstractProcessor {
 
@@ -127,73 +107,4 @@ public abstract class AbstractClassProcessor extends AbstractProcessor {
 
     protected abstract void generatePsiElements(@NotNull PsiClass psiClass, @NotNull PsiAnnotation psiAnnotation, @NotNull List<? super PsiElement> target);
 
-    void validateOfParam(PsiClass psiClass, ProblemBuilder builder, PsiAnnotation psiAnnotation, Collection<String> ofProperty) {
-        for (String fieldName : ofProperty) {
-            if (!StringUtil.isEmptyOrSpaces(fieldName)) {
-                PsiField fieldByName = psiClass.findFieldByName(fieldName, false);
-                if (null == fieldByName) {
-                    final String newPropertyValue = calcNewPropertyValue(ofProperty, fieldName);
-                    builder.addWarning(String.format("The field '%s' does not exist", fieldName),
-                            PsiQuickFixFactory.createChangeAnnotationParameterFix(psiAnnotation, "of", newPropertyValue));
-                }
-            }
-        }
-    }
-
-    void validateExcludeParam(PsiClass psiClass, ProblemBuilder builder, PsiAnnotation psiAnnotation, Collection<String> excludeProperty) {
-        for (String fieldName : excludeProperty) {
-            if (!StringUtil.isEmptyOrSpaces(fieldName)) {
-                PsiField fieldByName = psiClass.findFieldByName(fieldName, false);
-                if (null == fieldByName) {
-                    final String newPropertyValue = calcNewPropertyValue(excludeProperty, fieldName);
-                    builder.addWarning(String.format("The field '%s' does not exist", fieldName),
-                            PsiQuickFixFactory.createChangeAnnotationParameterFix(psiAnnotation, "exclude", newPropertyValue));
-                } else {
-                    if (fieldName.startsWith(OnceIOUtils.ONCEIO_INTERN_FIELD_MARKER) || fieldByName.hasModifierProperty(PsiModifier.STATIC)) {
-                        final String newPropertyValue = calcNewPropertyValue(excludeProperty, fieldName);
-                        builder.addWarning(String.format("The field '%s' would have been excluded anyway", fieldName),
-                                PsiQuickFixFactory.createChangeAnnotationParameterFix(psiAnnotation, "exclude", newPropertyValue));
-                    }
-                }
-            }
-        }
-    }
-
-    private String calcNewPropertyValue(Collection<String> allProperties, String fieldName) {
-        String result = null;
-        if (!allProperties.isEmpty() && (allProperties.size() > 1 || !allProperties.contains(fieldName))) {
-            result = allProperties.stream().filter(((Predicate<String>) fieldName::equals).negate())
-                    .collect(Collectors.joining("\",\"", "{\"", "\"}"));
-        }
-        return result;
-    }
-
-    boolean shouldGenerateNoArgsConstructor(@NotNull PsiClass psiClass, @NotNull AbstractConstructorClassProcessor argsConstructorProcessor) {
-        boolean result = onceIOConfigDiscovery.getBooleanOnceIOConfigProperty(ConfigKey.NO_ARGS_CONSTRUCTOR_EXTRA_PRIVATE, psiClass);
-        if (result) {
-            result = !PsiClassUtil.hasSuperClass(psiClass);
-        }
-        if (result) {
-            result = PsiAnnotationSearchUtil.isNotAnnotatedWith(psiClass, NoArgsConstructor.class);
-        }
-        if (result && PsiAnnotationSearchUtil.isAnnotatedWith(psiClass, AllArgsConstructor.class)) {
-            result = argsConstructorProcessor.getAllFields(psiClass).isEmpty();
-        }
-        if (result && PsiAnnotationSearchUtil.isAnnotatedWith(psiClass, RequiredArgsConstructor.class)) {
-            result = argsConstructorProcessor.getRequiredFields(psiClass).isEmpty();
-        }
-        return result;
-    }
-
-    boolean readCallSuperAnnotationOrConfigProperty(@NotNull PsiAnnotation psiAnnotation, @NotNull PsiClass psiClass, @NotNull ConfigKey configKey) {
-        final boolean result;
-        final Boolean declaredAnnotationValue = PsiAnnotationUtil.getDeclaredBooleanAnnotationValue(psiAnnotation, "callSuper");
-        if (null == declaredAnnotationValue) {
-            final String configProperty = onceIOConfigDiscovery.getStringOnceIOConfigProperty(configKey, psiClass);
-            result = PsiClassUtil.hasSuperClass(psiClass) && "CALL".equalsIgnoreCase(configProperty);
-        } else {
-            result = declaredAnnotationValue;
-        }
-        return result;
-    }
 }

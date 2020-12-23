@@ -20,7 +20,7 @@ import java.util.Collections;
 import java.util.Objects;
 
 /**
- * @author Plushnikov Michail
+ * @author Liar
  */
 public class OnceIOLightMethodBuilder extends LightMethodBuilder {
   private PsiMethod myMethod;

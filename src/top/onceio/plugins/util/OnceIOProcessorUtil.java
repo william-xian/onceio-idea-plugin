@@ -1,40 +1,21 @@
 package top.onceio.plugins.util;
 
-import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiAnnotationMemberValue;
 import com.intellij.psi.PsiAnnotationParameterList;
 import com.intellij.psi.PsiModifier;
-import com.intellij.psi.PsiModifierList;
-import com.intellij.psi.PsiModifierListOwner;
-import com.intellij.psi.util.PsiUtil;
-import lombok.AccessLevel;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
 
 /**
- * @author Plushnikov Michail
+ * @author Liar
  */
 public class OnceIOProcessorUtil {
-
-  private static final Map<Integer, AccessLevel> ACCESS_LEVEL_MAP = new HashMap<Integer, AccessLevel>() {{
-    put(PsiUtil.ACCESS_LEVEL_PUBLIC, AccessLevel.PUBLIC);
-    put(PsiUtil.ACCESS_LEVEL_PACKAGE_LOCAL, AccessLevel.PACKAGE);
-    put(PsiUtil.ACCESS_LEVEL_PROTECTED, AccessLevel.PROTECTED);
-    put(PsiUtil.ACCESS_LEVEL_PRIVATE, AccessLevel.PRIVATE);
-  }};
-
-  private static final Map<String, AccessLevel> VALUE_ACCESS_LEVEL_MAP = Stream.of(AccessLevel.values())
-    .collect(Collectors.toMap(AccessLevel::name, v -> v));
 
   @Nullable
   @PsiModifier.ModifierConstant
@@ -58,13 +39,6 @@ public class OnceIOProcessorUtil {
   @PsiModifier.ModifierConstant
   private static String getLevelVisibility(@NotNull PsiAnnotation psiAnnotation, @NotNull String parameter) {
     return convertAccessLevelToJavaModifier(PsiAnnotationUtil.getStringAnnotationValue(psiAnnotation, parameter));
-  }
-
-  @NotNull
-  public static AccessLevel getAccessLevel(@NotNull PsiAnnotation psiAnnotation, @NotNull String parameter) {
-    final String annotationValue = StringUtil.notNullize(
-      PsiAnnotationUtil.getStringAnnotationValue(psiAnnotation, parameter), AccessLevel.NONE.name());
-    return VALUE_ACCESS_LEVEL_MAP.computeIfAbsent(annotationValue, p -> AccessLevel.NONE);
   }
 
   public static boolean isLevelVisible(@NotNull PsiAnnotation psiAnnotation) {
@@ -113,19 +87,4 @@ public class OnceIOProcessorUtil {
     return null;
   }
 
-  @NotNull
-  public static PsiAnnotation createAnnotationWithAccessLevel(@NotNull Class<? extends Annotation> annotationClass, @NotNull PsiModifierListOwner psiModifierListOwner) {
-    String value = "";
-    final PsiModifierList modifierList = psiModifierListOwner.getModifierList();
-    if (null != modifierList) {
-      final int accessLevelCode = PsiUtil.getAccessLevel(modifierList);
-
-      final AccessLevel accessLevel = ACCESS_LEVEL_MAP.get(accessLevelCode);
-      if (null != accessLevel && !AccessLevel.PUBLIC.equals(accessLevel)) {
-        value = AccessLevel.class.getName() + "." + accessLevel;
-      }
-    }
-
-    return PsiAnnotationUtil.createPsiAnnotation(psiModifierListOwner, annotationClass, value);
-  }
 }

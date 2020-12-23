@@ -12,7 +12,7 @@ import top.onceio.core.util.Tuple2;
 import java.util.Collection;
 
 /**
- * Provides implicit usages of lombok fields
+ * Provides implicit usages of onceio fields
  */
 public class OnceIOImplicitUsageProvider implements ImplicitUsageProvider {
 

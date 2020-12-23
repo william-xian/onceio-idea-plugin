@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collections;
 
 /**
- * @author Plushnikov Michail
+ * @author Liar
  */
 public class OnceIOLightParameter extends LightParameter {
   private String myName;

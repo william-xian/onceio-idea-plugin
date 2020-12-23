@@ -5,7 +5,7 @@ import com.intellij.openapi.diagnostic.Logger;
 import java.lang.reflect.Field;
 
 /**
- * @author Plushnikov Michail
+ * @author Liar
  */
 public class ReflectionUtil {
   private static final Logger LOG = Logger.getInstance(ReflectionUtil.class.getName());

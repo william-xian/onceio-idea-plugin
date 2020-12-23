@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 /**
  * Creates fields for a @Builder inner class if it is predefined.
  *
- * @author Michail Plushnikov
+ * @author Liar
  */
 public class ModelPreDefinedInnerClassFieldProcessor extends AbstractModelPreDefinedInnerClassProcessor {
 

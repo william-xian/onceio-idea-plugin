@@ -15,7 +15,7 @@ import java.util.Collection;
 import java.util.HashSet;
 
 /**
- * @author Plushnikov Michail
+ * @author Liar
  */
 public class OnceIOInspection extends AbstractBaseJavaLocalInspectionTool {
 
@@ -67,7 +67,7 @@ public class OnceIOInspection extends AbstractBaseJavaLocalInspectionTool {
 
         /**
          * Check MethodCallExpressions for calls for default (argument less) constructor
-         * Produce an error if resolved constructor method is build by lombok and contains some arguments
+         * Produce an error if resolved constructor method is build by onceio and contains some arguments
          */
         @Override
         public void visitMethodCallExpression(PsiMethodCallExpression methodCall) {

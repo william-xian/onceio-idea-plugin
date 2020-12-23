@@ -7,7 +7,7 @@ import org.jetbrains.annotations.PropertyKey;
 import java.util.ResourceBundle;
 
 /**
- * {@link java.util.ResourceBundle}/localization utils for the lombok plugin.
+ * {@link java.util.ResourceBundle}/localization utils for the onceio plugin.
  */
 public class OnceIOBundle {
   /**
