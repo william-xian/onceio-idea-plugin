@@ -4,6 +4,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.file.impl.JavaFileManager;
+import com.intellij.psi.util.PsiTypesUtil;
 import top.onceio.plugins.problem.ProblemBuilder;
 import top.onceio.plugins.psi.OnceIOLightClassBuilder;
 import top.onceio.plugins.psi.OnceIOLightMethodBuilder;
@@ -164,7 +165,7 @@ public class ModelHandler {
         return existingMethods.stream().map(PsiMethod::getName).anyMatch(builderMethodName::equals);
     }
 
-    public Optional<PsiMethod> createBuilderMethodIfNecessary(@NotNull PsiClass containingClass, @Nullable PsiMethod psiMethod, @NotNull PsiClass builderPsiClass, @NotNull PsiAnnotation psiAnnotation) {
+    public Optional<PsiMethod> createBuilderMethodIfNecessary(@NotNull PsiClass containingClass, @NotNull PsiClass builderPsiClass, @NotNull PsiAnnotation psiAnnotation) {
         final String builderMethodName = getMetaMethodName(psiAnnotation);
         if (!builderMethodName.isEmpty() && !hasMethod(containingClass, builderMethodName)) {
             final PsiType psiTypeWithGenerics = PsiClassUtil.getTypeWithGenerics(builderPsiClass);
@@ -176,15 +177,56 @@ public class ModelHandler {
                     .withNavigationElement(psiAnnotation)
                     .withModifier(getBuilderOuterAccessVisibility(psiAnnotation));
             methodBuilder.withBody(PsiMethodUtil.createCodeBlockFromText(blockText, methodBuilder));
-
-            addTypeParameters(builderPsiClass, psiMethod, methodBuilder);
-
-            if (null == psiMethod || psiMethod.isConstructor() || psiMethod.hasModifierProperty(PsiModifier.STATIC)) {
-                methodBuilder.withModifier(PsiModifier.STATIC);
-            }
+            addTypeParameters(builderPsiClass, null, methodBuilder);
+            methodBuilder.withModifier(PsiModifier.STATIC);
             return Optional.of(methodBuilder);
         }
+
         return Optional.empty();
+    }
+
+
+    public List<PsiMethod> createGetterSetterMethodIfNecessary(@NotNull PsiClass psiClass, @NotNull PsiAnnotation psiAnnotation) {
+        List<PsiMethod> result = new ArrayList<>();
+
+        for (PsiField field : psiClass.getFields()) {
+            String getter = "get" + upperCap(field.getName());
+            String setter = "set" + upperCap(field.getName());
+
+            if (psiClass.findMethodsByName(getter, false).length == 0) {
+                final String blockText = String.format("return this.%s;", field.getName());
+                final OnceIOLightMethodBuilder methodBuilder = new OnceIOLightMethodBuilder(psiClass.getManager(), getter)
+                        .withMethodReturnType(field.getType())
+                        .withContainingClass(psiClass)
+                        .withNavigationElement(psiAnnotation)
+                        .withModifier(PsiModifier.PUBLIC);
+                methodBuilder.withBody(PsiMethodUtil.createCodeBlockFromText(blockText, methodBuilder));
+                result.add(methodBuilder);
+            }
+
+            if (psiClass.findMethodsByName(setter, false).length == 0) {
+                final String blockText = String.format("this.%s = %s;return this;", field.getName(), field.getName());
+                final OnceIOLightMethodBuilder methodBuilder = new OnceIOLightMethodBuilder(psiClass.getManager(), setter)
+                        .withMethodReturnType(PsiTypesUtil.getClassType(psiClass))
+                        .withContainingClass(psiClass)
+                        .withNavigationElement(psiAnnotation)
+                        .withModifier(PsiModifier.PUBLIC)
+                        .withParameter(field.getName(), field.getType());
+                methodBuilder.withBody(PsiMethodUtil.createCodeBlockFromText(blockText, methodBuilder));
+                result.add(methodBuilder);
+            }
+
+
+        }
+        return result;
+    }
+
+    String upperCap(String field) {
+        if (field.length() > 1) {
+            return field.substring(0, 1).toUpperCase() + field.substring(1);
+        } else {
+            return field.toUpperCase();
+        }
     }
 
 

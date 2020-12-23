@@ -3,12 +3,12 @@ package top.onceio.plugins.processor.clazz.model;
 
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.psi.*;
-import top.onceio.plugins.problem.ProblemBuilder;
-import top.onceio.plugins.processor.OnceIOPsiElementUsage;
 import org.jetbrains.annotations.NotNull;
 import top.onceio.core.db.annotation.Model;
 import top.onceio.plugins.handler.ModelHandler;
+import top.onceio.plugins.problem.ProblemBuilder;
 import top.onceio.plugins.processor.AbstractClassProcessor;
+import top.onceio.plugins.processor.OnceIOPsiElementUsage;
 import top.onceio.plugins.settings.ProjectSettings;
 
 import java.util.Collection;
@@ -55,10 +55,13 @@ public class ModelProcessor extends AbstractClassProcessor {
         final String builderClassName = builderHandler.getBuilderClassName(psiClass, psiAnnotation, null);
         final PsiClass builderClass = psiClass.findInnerClassByName(builderClassName, false);
         if (null != builderClass) {
-            builderHandler.createBuilderMethodIfNecessary(psiClass, null, builderClass, psiAnnotation)
+            builderHandler.createBuilderMethodIfNecessary(psiClass, builderClass, psiAnnotation)
                     .ifPresent(target::add);
         }
 
+        List<PsiMethod> methods = builderHandler.createGetterSetterMethodIfNecessary(psiClass, psiAnnotation);
+
+        target.addAll(methods);
 
     }
 
