@@ -9,7 +9,7 @@ import de.plushnikov.intellij.plugin.problem.ProblemBuilder;
 import de.plushnikov.intellij.plugin.processor.clazz.AbstractClassProcessor;
 import de.plushnikov.intellij.plugin.processor.handler.SuperBuilderHandler;
 import de.plushnikov.intellij.plugin.settings.ProjectSettings;
-import de.plushnikov.intellij.plugin.util.PsiClassUtil;
+import top.onceio.plugins.util.PsiClassUtil;
 import lombok.experimental.SuperBuilder;
 import org.jetbrains.annotations.NotNull;
 

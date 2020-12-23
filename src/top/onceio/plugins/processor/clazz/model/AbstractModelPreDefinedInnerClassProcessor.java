@@ -9,12 +9,12 @@ import com.intellij.psi.PsiMethod;
 import de.plushnikov.intellij.plugin.problem.LombokProblem;
 import de.plushnikov.intellij.plugin.problem.ProblemBuilder;
 import de.plushnikov.intellij.plugin.problem.ProblemEmptyBuilder;
-import de.plushnikov.intellij.plugin.processor.clazz.AbstractClassProcessor;
-import de.plushnikov.intellij.plugin.util.PsiAnnotationSearchUtil;
-import de.plushnikov.intellij.plugin.util.PsiClassUtil;
+import top.onceio.plugins.util.PsiAnnotationSearchUtil;
+import top.onceio.plugins.util.PsiClassUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import top.onceio.plugins.handler.ModelHandler;
+import top.onceio.plugins.processor.AbstractClassProcessor;
 import top.onceio.plugins.settings.ProjectSettings;
 
 import java.lang.annotation.Annotation;

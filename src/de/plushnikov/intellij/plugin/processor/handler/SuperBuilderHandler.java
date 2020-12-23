@@ -8,10 +8,10 @@ import de.plushnikov.intellij.plugin.processor.clazz.ToStringProcessor;
 import de.plushnikov.intellij.plugin.processor.clazz.constructor.NoArgsConstructorProcessor;
 import de.plushnikov.intellij.plugin.psi.LombokLightClassBuilder;
 import de.plushnikov.intellij.plugin.psi.LombokLightMethodBuilder;
-import de.plushnikov.intellij.plugin.util.PsiAnnotationSearchUtil;
-import de.plushnikov.intellij.plugin.util.PsiAnnotationUtil;
-import de.plushnikov.intellij.plugin.util.PsiClassUtil;
-import de.plushnikov.intellij.plugin.util.PsiMethodUtil;
+import top.onceio.plugins.util.PsiAnnotationSearchUtil;
+import top.onceio.plugins.util.PsiAnnotationUtil;
+import top.onceio.plugins.util.PsiClassUtil;
+import top.onceio.plugins.util.PsiMethodUtil;
 import lombok.experimental.Tolerate;
 import org.jetbrains.annotations.NotNull;
 

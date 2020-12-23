@@ -8,8 +8,8 @@ import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiModifier;
 import de.plushnikov.intellij.plugin.problem.ProblemBuilder;
 import de.plushnikov.intellij.plugin.processor.LombokPsiElementUsage;
-import de.plushnikov.intellij.plugin.util.LombokProcessorUtil;
-import de.plushnikov.intellij.plugin.util.PsiClassUtil;
+import top.onceio.plugins.util.LombokProcessorUtil;
+import top.onceio.plugins.util.PsiClassUtil;
 import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 

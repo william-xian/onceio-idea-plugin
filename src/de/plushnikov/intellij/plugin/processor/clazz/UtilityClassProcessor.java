@@ -9,8 +9,8 @@ import com.intellij.psi.PsiModifier;
 import com.intellij.psi.PsiModifierList;
 import de.plushnikov.intellij.plugin.problem.ProblemBuilder;
 import de.plushnikov.intellij.plugin.psi.LombokLightMethodBuilder;
-import de.plushnikov.intellij.plugin.util.PsiClassUtil;
-import de.plushnikov.intellij.plugin.util.PsiMethodUtil;
+import top.onceio.plugins.util.PsiClassUtil;
+import top.onceio.plugins.util.PsiMethodUtil;
 import lombok.experimental.UtilityClass;
 import org.jetbrains.annotations.NotNull;
 

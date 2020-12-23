@@ -9,7 +9,7 @@ import com.intellij.psi.PsiType;
 import com.intellij.psi.impl.light.LightModifierList;
 import com.intellij.psi.impl.light.LightParameter;
 import com.intellij.psi.impl.light.LightVariableBuilder;
-import de.plushnikov.intellij.plugin.util.ReflectionUtil;
+import top.onceio.plugins.util.ReflectionUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;

@@ -6,7 +6,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiField;
 import de.plushnikov.intellij.plugin.processor.handler.FieldNameConstantsHandler;
 import de.plushnikov.intellij.plugin.psi.LombokLightClassBuilder;
-import de.plushnikov.intellij.plugin.util.PsiClassUtil;
+import top.onceio.plugins.util.PsiClassUtil;
 import lombok.experimental.FieldNameConstants;
 import org.jetbrains.annotations.NotNull;
 

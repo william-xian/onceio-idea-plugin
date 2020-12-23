@@ -11,7 +11,7 @@ import com.intellij.psi.PsiType;
 import com.intellij.psi.util.PsiTreeUtil;
 import de.plushnikov.intellij.plugin.problem.LombokProblem;
 import de.plushnikov.intellij.plugin.problem.ProblemNewBuilder;
-import de.plushnikov.intellij.plugin.util.PsiAnnotationUtil;
+import top.onceio.plugins.util.PsiAnnotationUtil;
 import lombok.Cleanup;
 import org.jetbrains.annotations.NotNull;
 

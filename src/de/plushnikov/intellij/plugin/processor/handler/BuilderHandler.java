@@ -8,10 +8,9 @@ import de.plushnikov.intellij.plugin.problem.ProblemBuilder;
 import de.plushnikov.intellij.plugin.processor.clazz.ToStringProcessor;
 import de.plushnikov.intellij.plugin.processor.clazz.constructor.NoArgsConstructorProcessor;
 import de.plushnikov.intellij.plugin.processor.handler.singular.AbstractSingularHandler;
-import de.plushnikov.intellij.plugin.processor.handler.singular.SingularHandlerFactory;
 import de.plushnikov.intellij.plugin.psi.LombokLightClassBuilder;
 import de.plushnikov.intellij.plugin.psi.LombokLightMethodBuilder;
-import de.plushnikov.intellij.plugin.util.*;
+import top.onceio.plugins.util.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.Wither;
@@ -25,7 +24,7 @@ import java.util.stream.Stream;
 
 import static com.intellij.openapi.util.text.StringUtil.capitalize;
 import static com.intellij.openapi.util.text.StringUtil.replace;
-import static de.plushnikov.intellij.plugin.lombokconfig.ConfigKey.BUILDER_CLASS_NAME;
+import static top.onceio.plugins.config.ConfigKey.BUILDER_CLASS_NAME;
 
 /**
  * Handler methods for Builder-processing
@@ -133,11 +132,6 @@ public class BuilderHandler {
     builderInfos.stream().filter(BuilderInfo::hasSingularAnnotation).forEach(builderInfo -> {
       final PsiType psiVariableType = builderInfo.getVariable().getType();
       final String qualifiedName = PsiTypeUtil.getQualifiedName(psiVariableType);
-      if (SingularHandlerFactory.isInvalidSingularType(qualifiedName)) {
-        problemBuilder.addError("Lombok does not know how to create the singular-form builder methods for type '%s'; " +
-          "they won't be generated.", qualifiedName != null ? qualifiedName : psiVariableType.getCanonicalText());
-        result.set(false);
-      }
 
       if (!AbstractSingularHandler.validateSingularName(builderInfo.getSingularAnnotation(), builderInfo.getFieldName())) {
         problemBuilder.addError("Can't singularize this name: \"%s\"; please specify the singular explicitly (i.e. @Singular(\"sheep\"))", builderInfo.getFieldName());

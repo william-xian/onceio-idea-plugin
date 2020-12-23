@@ -10,10 +10,11 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="org.projectlombok:lombok:1.18.12" level="project" />
+    <orderEntry type="library" name="top.onceio:onceio-core:0.0.9" level="project" />
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MAVEN_REPOSITORY$/top/onceio/onceio-core/0.0.8/onceio-core-0.0.8.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/top/onceio/onceio-core/0.0.9/onceio-core-0.0.9.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

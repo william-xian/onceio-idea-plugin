@@ -7,13 +7,11 @@ import com.intellij.psi.impl.PsiImplUtil;
 import com.intellij.psi.impl.source.PsiClassReferenceType;
 import de.plushnikov.intellij.plugin.processor.field.AccessorsInfo;
 import de.plushnikov.intellij.plugin.processor.handler.singular.BuilderElementHandler;
-import de.plushnikov.intellij.plugin.processor.handler.singular.SingularHandlerFactory;
 import de.plushnikov.intellij.plugin.thirdparty.LombokUtils;
-import de.plushnikov.intellij.plugin.util.PsiAnnotationSearchUtil;
-import de.plushnikov.intellij.plugin.util.PsiAnnotationUtil;
-import de.plushnikov.intellij.plugin.util.PsiClassUtil;
+import top.onceio.plugins.util.PsiAnnotationSearchUtil;
+import top.onceio.plugins.util.PsiAnnotationUtil;
+import top.onceio.plugins.util.PsiClassUtil;
 import lombok.Builder;
-import lombok.Singular;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -62,9 +60,6 @@ public class BuilderInfo {
 
     result.fieldInBuilderName = psiParameter.getName();
 
-    result.singularAnnotation = PsiAnnotationSearchUtil.findAnnotation(psiParameter, Singular.class);
-    result.builderElementHandler = SingularHandlerFactory.getHandlerFor(psiParameter, result.singularAnnotation);
-
     return result;
   }
 
@@ -83,9 +78,6 @@ public class BuilderInfo {
 
     final AccessorsInfo accessorsInfo = AccessorsInfo.build(psiField);
     result.fieldInBuilderName = accessorsInfo.removePrefix(psiField.getName());
-
-    result.singularAnnotation = PsiAnnotationSearchUtil.findAnnotation(psiField, Singular.class);
-    result.builderElementHandler = SingularHandlerFactory.getHandlerFor(psiField, result.singularAnnotation);
 
     return result;
   }

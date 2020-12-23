@@ -7,7 +7,7 @@ import com.intellij.psi.impl.file.impl.JavaFileManager;
 import de.plushnikov.intellij.plugin.problem.ProblemBuilder;
 import de.plushnikov.intellij.plugin.psi.LombokLightClassBuilder;
 import de.plushnikov.intellij.plugin.psi.LombokLightMethodBuilder;
-import de.plushnikov.intellij.plugin.util.*;
+import top.onceio.plugins.util.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import top.onceio.core.db.model.BaseMeta;

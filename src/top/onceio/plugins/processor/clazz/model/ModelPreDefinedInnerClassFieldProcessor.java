@@ -1,7 +1,7 @@
 package top.onceio.plugins.processor.clazz.model;
 
 import com.intellij.psi.*;
-import de.plushnikov.intellij.plugin.util.PsiClassUtil;
+import top.onceio.plugins.util.PsiClassUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import top.onceio.core.db.annotation.Model;

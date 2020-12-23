@@ -5,12 +5,12 @@ import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.psi.*;
 import de.plushnikov.intellij.plugin.problem.ProblemBuilder;
 import de.plushnikov.intellij.plugin.processor.LombokPsiElementUsage;
-import de.plushnikov.intellij.plugin.processor.clazz.AbstractClassProcessor;
 import lombok.Builder;
 import lombok.Singular;
 import org.jetbrains.annotations.NotNull;
 import top.onceio.core.db.annotation.Model;
 import top.onceio.plugins.handler.ModelHandler;
+import top.onceio.plugins.processor.AbstractClassProcessor;
 import top.onceio.plugins.settings.ProjectSettings;
 
 import java.util.Collection;
@@ -61,6 +61,8 @@ public class ModelProcessor extends AbstractClassProcessor {
             builderHandler.createBuilderMethodIfNecessary(psiClass, null, builderClass, psiAnnotation)
                     .ifPresent(target::add);
         }
+
+
     }
 
     @Override

@@ -5,7 +5,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiNameValuePair;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
-import de.plushnikov.intellij.plugin.util.PsiAnnotationSearchUtil;
+import top.onceio.plugins.util.PsiAnnotationSearchUtil;
 
 public class EqualsAndHashCodeCallSuperHandler {
 

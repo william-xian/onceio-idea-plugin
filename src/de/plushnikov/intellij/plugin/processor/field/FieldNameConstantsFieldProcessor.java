@@ -3,13 +3,13 @@ package de.plushnikov.intellij.plugin.processor.field;
 import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 import top.onceio.plugins.config.OnceIOConfigDiscovery;
-import de.plushnikov.intellij.plugin.lombokconfig.ConfigKey;
+import top.onceio.plugins.config.ConfigKey;
 import de.plushnikov.intellij.plugin.problem.ProblemBuilder;
 import de.plushnikov.intellij.plugin.processor.LombokPsiElementUsage;
 import de.plushnikov.intellij.plugin.psi.LombokLightFieldBuilder;
 import de.plushnikov.intellij.plugin.thirdparty.LombokUtils;
-import de.plushnikov.intellij.plugin.util.LombokProcessorUtil;
-import de.plushnikov.intellij.plugin.util.PsiAnnotationUtil;
+import top.onceio.plugins.util.LombokProcessorUtil;
+import top.onceio.plugins.util.PsiAnnotationUtil;
 import lombok.experimental.FieldNameConstants;
 import org.jetbrains.annotations.NotNull;
 

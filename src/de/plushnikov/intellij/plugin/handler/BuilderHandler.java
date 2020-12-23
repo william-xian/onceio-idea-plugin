@@ -5,7 +5,7 @@ import com.intellij.psi.PsiField;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 import lombok.Builder;
-import de.plushnikov.intellij.plugin.util.PsiAnnotationSearchUtil;
+import top.onceio.plugins.util.PsiAnnotationSearchUtil;
 
 
 public class BuilderHandler {

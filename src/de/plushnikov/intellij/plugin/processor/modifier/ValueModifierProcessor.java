@@ -7,7 +7,7 @@ import com.intellij.psi.PsiModifier;
 import com.intellij.psi.PsiModifierList;
 import com.intellij.psi.PsiModifierListOwner;
 import com.intellij.psi.util.PsiTreeUtil;
-import de.plushnikov.intellij.plugin.util.PsiAnnotationSearchUtil;
+import top.onceio.plugins.util.PsiAnnotationSearchUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
