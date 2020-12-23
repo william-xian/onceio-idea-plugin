@@ -6,7 +6,7 @@ import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
-import top.onceio.plugins.problem.LombokProblem;
+import top.onceio.plugins.problem.OnceIOProblem;
 import top.onceio.plugins.problem.ProblemBuilder;
 import top.onceio.plugins.problem.ProblemEmptyBuilder;
 import top.onceio.plugins.util.PsiAnnotationSearchUtil;
@@ -78,7 +78,7 @@ public abstract class AbstractModelPreDefinedInnerClassProcessor extends Abstrac
 
     @NotNull
     @Override
-    public Collection<LombokProblem> verifyAnnotation(@NotNull PsiAnnotation psiAnnotation) {
+    public Collection<OnceIOProblem> verifyAnnotation(@NotNull PsiAnnotation psiAnnotation) {
         //do nothing
         return Collections.emptySet();
     }

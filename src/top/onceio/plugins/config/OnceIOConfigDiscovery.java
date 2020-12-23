@@ -9,7 +9,7 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.PathUtil;
 import com.intellij.util.indexing.FileBasedIndex;
-import top.onceio.plugins.psi.LombokLightClassBuilder;
+import top.onceio.plugins.psi.OnceIOLightClassBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -31,7 +31,7 @@ public class OnceIOConfigDiscovery {
   }
 
   @NotNull
-  public String getStringLombokConfigProperty(@NotNull ConfigKey configKey, @NotNull PsiClass psiClass) {
+  public String getStringOnceIOConfigProperty(@NotNull ConfigKey configKey, @NotNull PsiClass psiClass) {
     final String canonicalPath = calculateCanonicalPath(psiClass);
     if (null != canonicalPath) {
       return discoverProperty(configKey, canonicalPath, psiClass.getProject());
@@ -40,13 +40,13 @@ public class OnceIOConfigDiscovery {
     }
   }
 
-  public boolean getBooleanLombokConfigProperty(@NotNull ConfigKey configKey, @NotNull PsiClass psiClass) {
-    final String configProperty = getStringLombokConfigProperty(configKey, psiClass);
+  public boolean getBooleanOnceIOConfigProperty(@NotNull ConfigKey configKey, @NotNull PsiClass psiClass) {
+    final String configProperty = getStringOnceIOConfigProperty(configKey, psiClass);
     return Boolean.parseBoolean(configProperty);
   }
 
   @NotNull
-  public String[] getMultipleValueLombokConfigProperty(@NotNull ConfigKey configKey, @NotNull PsiClass psiClass) {
+  public String[] getMultipleValueOnceIOConfigProperty(@NotNull ConfigKey configKey, @NotNull PsiClass psiClass) {
     final Collection<String> result = new HashSet<>();
 
     final String canonicalPath = calculateCanonicalPath(psiClass);
@@ -76,8 +76,8 @@ public class OnceIOConfigDiscovery {
   private String calculateCanonicalPath(@NotNull PsiClass psiClass) {
     String canonicalPath = null;
     final PsiFile psiFile;
-    if (psiClass instanceof LombokLightClassBuilder) {
-      // Use containing class for all LombokLightClasses
+    if (psiClass instanceof OnceIOLightClassBuilder) {
+      // Use containing class for all OnceIOLightClasses
       final PsiClass containingClass = psiClass.getContainingClass();
       if (null != containingClass) {
         psiFile = containingClass.getContainingFile();

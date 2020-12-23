@@ -4,7 +4,7 @@ package top.onceio.plugins.processor.clazz.model;
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.psi.*;
 import top.onceio.plugins.problem.ProblemBuilder;
-import de.plushnikov.intellij.plugin.processor.LombokPsiElementUsage;
+import top.onceio.plugins.processor.OnceIOPsiElementUsage;
 import lombok.Builder;
 import lombok.Singular;
 import org.jetbrains.annotations.NotNull;
@@ -66,7 +66,7 @@ public class ModelProcessor extends AbstractClassProcessor {
     }
 
     @Override
-    public LombokPsiElementUsage checkFieldUsage(@NotNull PsiField psiField, @NotNull PsiAnnotation psiAnnotation) {
-        return LombokPsiElementUsage.READ_WRITE;
+    public OnceIOPsiElementUsage checkFieldUsage(@NotNull PsiField psiField, @NotNull PsiAnnotation psiAnnotation) {
+        return OnceIOPsiElementUsage.READ_WRITE;
     }
 }

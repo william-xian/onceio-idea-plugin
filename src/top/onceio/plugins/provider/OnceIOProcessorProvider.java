@@ -4,7 +4,7 @@ import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
-import de.plushnikov.intellij.plugin.processor.Processor;
+import top.onceio.plugins.processor.Processor;
 import top.onceio.plugins.util.PsiAnnotationSearchUtil;
 import top.onceio.plugins.util.PsiClassUtil;
 import org.jetbrains.annotations.NotNull;
@@ -54,7 +54,7 @@ public class OnceIOProcessorProvider {
         lombokTypeProcessors.clear();
         registeredAnnotationNames.clear();
 
-        for (Processor processor : OnceIOProcessorManager.getLombokProcessors()) {
+        for (Processor processor : OnceIOProcessorManager.getOnceIOProcessors()) {
             if (processor.isEnabled(myPropertiesComponent)) {
 
                 Class<? extends Annotation>[] annotationClasses = processor.getSupportedAnnotationClasses();
@@ -71,7 +71,7 @@ public class OnceIOProcessorProvider {
     }
 
     @NotNull
-    Collection<Processor> getLombokProcessors(@NotNull Class supportedClass) {
+    Collection<Processor> getOnceIOProcessors(@NotNull Class supportedClass) {
         return lombokTypeProcessors.computeIfAbsent(supportedClass, k -> ConcurrentHashMap.newKeySet());
     }
 
@@ -85,7 +85,7 @@ public class OnceIOProcessorProvider {
     @NotNull
     Collection<Tuple2<Processor, PsiAnnotation>> getApplicableProcessors(@NotNull PsiMember psiMember) {
         Collection<Tuple2<Processor, PsiAnnotation>> result = Collections.emptyList();
-        if (verifyLombokAnnotationPresent(psiMember)) {
+        if (verifyOnceIOAnnotationPresent(psiMember)) {
             result = new ArrayList<>();
 
             addApplicableProcessors(psiMember, result);
@@ -102,7 +102,7 @@ public class OnceIOProcessorProvider {
         valueList.add(value);
     }
 
-    private boolean verifyLombokAnnotationPresent(@NotNull PsiClass psiClass) {
+    private boolean verifyOnceIOAnnotationPresent(@NotNull PsiClass psiClass) {
         if (PsiAnnotationSearchUtil.checkAnnotationsSimpleNameExistsIn(psiClass, registeredAnnotationNames)) {
             return true;
         }
@@ -120,19 +120,19 @@ public class OnceIOProcessorProvider {
         }
         final PsiElement psiClassParent = psiClass.getParent();
         if (psiClassParent instanceof PsiClass) {
-            return verifyLombokAnnotationPresent((PsiClass) psiClassParent);
+            return verifyOnceIOAnnotationPresent((PsiClass) psiClassParent);
         }
 
         return false;
     }
 
-    private boolean verifyLombokAnnotationPresent(@NotNull PsiMember psiMember) {
+    private boolean verifyOnceIOAnnotationPresent(@NotNull PsiMember psiMember) {
         if (PsiAnnotationSearchUtil.checkAnnotationsSimpleNameExistsIn(psiMember, registeredAnnotationNames)) {
             return true;
         }
 
         final PsiClass psiClass = psiMember.getContainingClass();
-        return null != psiClass && verifyLombokAnnotationPresent(psiClass);
+        return null != psiClass && verifyOnceIOAnnotationPresent(psiClass);
     }
 
     private void addApplicableProcessors(@NotNull PsiMember psiMember, @NotNull Collection<Tuple2<Processor, PsiAnnotation>> target) {

@@ -19,7 +19,7 @@ import com.intellij.openapi.wm.WindowManager;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiPackage;
 import com.intellij.ui.awt.RelativePoint;
-import top.onceio.plugins.LombokBundle;
+import top.onceio.plugins.OnceIOBundle;
 import top.onceio.plugins.Version;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -34,11 +34,11 @@ public class OnceIOProjectValidatorActivity implements StartupActivity {
     @Override
     public void runActivity(@NotNull Project project) {
         // If plugin is not enabled - no point to continue
-        if (!ProjectSettings.isLombokEnabledInProject(project)) {
+        if (!ProjectSettings.isOnceIOEnabledInProject(project)) {
             return;
         }
 
-        final boolean hasLombokLibrary = hasLombokLibrary(project);
+        final boolean hasOnceIOLibrary = hasOnceIOLibrary(project);
 
         NotificationGroup group = NotificationGroup.findRegisteredGroup(Version.PLUGIN_NAME);
         if (group == null) {
@@ -46,23 +46,23 @@ public class OnceIOProjectValidatorActivity implements StartupActivity {
         }
 
         // If dependency is missing and missing dependency notification setting is enabled (defaults to disabled)
-        if (!hasLombokLibrary && ProjectSettings.isEnabled(project, ProjectSettings.IS_MISSING_LOMBOK_CHECK_ENABLED, false)) {
-            Notification notification = group.createNotification(LombokBundle.message("config.warn.dependency.missing.title"),
-                    LombokBundle.message("config.warn.dependency.missing.message", project.getName()),
+        if (!hasOnceIOLibrary && ProjectSettings.isEnabled(project, ProjectSettings.IS_MISSING_ONCEIO_CHECK_ENABLED, false)) {
+            Notification notification = group.createNotification(OnceIOBundle.message("config.warn.dependency.missing.title"),
+                    OnceIOBundle.message("config.warn.dependency.missing.message", project.getName()),
                     NotificationType.ERROR, NotificationListener.URL_OPENING_LISTENER);
 
             Notifications.Bus.notify(notification, project);
         }
 
         // If dependency is present and out of date notification setting is enabled (defaults to disabled)
-        if (hasLombokLibrary && ProjectSettings.isEnabled(project, ProjectSettings.IS_LOMBOK_VERSION_CHECK_ENABLED, false)) {
+        if (hasOnceIOLibrary && ProjectSettings.isEnabled(project, ProjectSettings.IS_ONCEIO_VERSION_CHECK_ENABLED, false)) {
             final ModuleManager moduleManager = ModuleManager.getInstance(project);
             for (Module module : moduleManager.getModules()) {
-                String lombokVersion = parseLombokVersion(findLombokEntry(ModuleRootManager.getInstance(module)));
+                String lombokVersion = parseOnceIOVersion(findOnceIOEntry(ModuleRootManager.getInstance(module)));
 
-                if (null != lombokVersion && compareVersionString(lombokVersion, Version.LAST_LOMBOK_VERSION) < 0) {
-                    Notification notification = group.createNotification(LombokBundle.message("config.warn.dependency.outdated.title"),
-                            LombokBundle.message("config.warn.dependency.outdated.message", project.getName(), module.getName(), lombokVersion, Version.LAST_LOMBOK_VERSION),
+                if (null != lombokVersion && compareVersionString(lombokVersion, Version.LAST_ONCEIO_VERSION) < 0) {
+                    Notification notification = group.createNotification(OnceIOBundle.message("config.warn.dependency.outdated.title"),
+                            OnceIOBundle.message("config.warn.dependency.outdated.message", project.getName(), module.getName(), lombokVersion, Version.LAST_ONCEIO_VERSION),
                             NotificationType.WARNING, NotificationListener.URL_OPENING_LISTENER);
 
                     Notifications.Bus.notify(notification, project);
@@ -72,7 +72,7 @@ public class OnceIOProjectValidatorActivity implements StartupActivity {
 
         // Annotation Processing check
         boolean annotationProcessorsEnabled = hasAnnotationProcessorsEnabled(project);
-        if (hasLombokLibrary && !annotationProcessorsEnabled &&
+        if (hasOnceIOLibrary && !annotationProcessorsEnabled &&
                 ProjectSettings.isEnabled(project, ProjectSettings.IS_ANNOTATION_PROCESSING_CHECK_ENABLED, true)) {
 
             suggestEnableAnnotations(project, group);
@@ -80,8 +80,8 @@ public class OnceIOProjectValidatorActivity implements StartupActivity {
     }
 
     private void suggestEnableAnnotations(Project project, NotificationGroup group) {
-        Notification notification = group.createNotification(LombokBundle.message("config.warn.annotation-processing.disabled.title"),
-                LombokBundle.message("config.warn.annotation-processing.disabled.message", project.getName()),
+        Notification notification = group.createNotification(OnceIOBundle.message("config.warn.annotation-processing.disabled.title"),
+                OnceIOBundle.message("config.warn.annotation-processing.disabled.message", project.getName()),
                 NotificationType.ERROR,
                 (not, e) -> {
                     if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
@@ -117,7 +117,7 @@ public class OnceIOProjectValidatorActivity implements StartupActivity {
         return compilerConfiguration.getDefaultProcessorProfile().isEnabled();
     }
 
-    private boolean hasLombokLibrary(Project project) {
+    private boolean hasOnceIOLibrary(Project project) {
         PsiPackage lombokPackage;
         try {
             lombokPackage = JavaPsiFacade.getInstance(project).findPackage("lombok");
@@ -128,7 +128,7 @@ public class OnceIOProjectValidatorActivity implements StartupActivity {
     }
 
     @Nullable
-    private OrderEntry findLombokEntry(@NotNull ModuleRootManager moduleRootManager) {
+    private OrderEntry findOnceIOEntry(@NotNull ModuleRootManager moduleRootManager) {
         final OrderEntry[] orderEntries = moduleRootManager.getOrderEntries();
         for (OrderEntry orderEntry : orderEntries) {
             if (orderEntry.getPresentableName().contains("lombok")) {
@@ -139,7 +139,7 @@ public class OnceIOProjectValidatorActivity implements StartupActivity {
     }
 
     @Nullable
-    String parseLombokVersion(@Nullable OrderEntry orderEntry) {
+    String parseOnceIOVersion(@Nullable OrderEntry orderEntry) {
         String result = null;
         if (null != orderEntry) {
             final String presentableName = orderEntry.getPresentableName();

@@ -5,8 +5,8 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.file.impl.JavaFileManager;
 import top.onceio.plugins.problem.ProblemBuilder;
-import top.onceio.plugins.psi.LombokLightClassBuilder;
-import top.onceio.plugins.psi.LombokLightMethodBuilder;
+import top.onceio.plugins.psi.OnceIOLightClassBuilder;
+import top.onceio.plugins.psi.OnceIOLightMethodBuilder;
 import top.onceio.plugins.util.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -81,7 +81,7 @@ public class ModelHandler {
 
     boolean validateInvalidAnnotationsOnBuilderClass(@NotNull PsiClass builderClass, @NotNull ProblemBuilder problemBuilder) {
         if (PsiAnnotationSearchUtil.checkAnnotationsSimpleNameExistsIn(builderClass, INVALID_ON_BUILDERS)) {
-            problemBuilder.addError("Lombok annotations are not allowed on builder class.");
+            problemBuilder.addError("OnceIO annotations are not allowed on builder class.");
             return false;
         }
         return true;
@@ -117,7 +117,7 @@ public class ModelHandler {
     @NotNull
     @PsiModifier.ModifierConstant
     private String getBuilderOuterAccessVisibility(@NotNull PsiAnnotation psiAnnotation) {
-        final String accessVisibility = LombokProcessorUtil.getAccessVisibility(psiAnnotation);
+        final String accessVisibility = OnceIOProcessorUtil.getAccessVisibility(psiAnnotation);
         return null == accessVisibility ? PsiModifier.PUBLIC : accessVisibility;
     }
 
@@ -170,7 +170,7 @@ public class ModelHandler {
             final PsiType psiTypeWithGenerics = PsiClassUtil.getTypeWithGenerics(builderPsiClass);
 
             final String blockText = String.format("return new %s();", psiTypeWithGenerics.getPresentableText());
-            final LombokLightMethodBuilder methodBuilder = new LombokLightMethodBuilder(containingClass.getManager(), builderMethodName)
+            final OnceIOLightMethodBuilder methodBuilder = new OnceIOLightMethodBuilder(containingClass.getManager(), builderMethodName)
                     .withMethodReturnType(psiTypeWithGenerics)
                     .withContainingClass(containingClass)
                     .withNavigationElement(psiAnnotation)
@@ -231,7 +231,7 @@ public class ModelHandler {
 
     @NotNull
     public PsiClass createBuilderClass(@NotNull PsiClass psiClass, @Nullable PsiMethod psiMethod, @NotNull PsiAnnotation psiAnnotation) {
-        LombokLightClassBuilder builderClass;
+        OnceIOLightClassBuilder builderClass;
         if (null != psiMethod) {
             builderClass = createEmptyBuilderClass(psiClass, psiMethod, psiAnnotation);
         } else {
@@ -274,13 +274,13 @@ public class ModelHandler {
     }
 
     @NotNull
-    private LombokLightClassBuilder createEmptyBuilderClass(@NotNull PsiClass psiClass, @NotNull PsiMethod psiMethod, @NotNull PsiAnnotation psiAnnotation) {
+    private OnceIOLightClassBuilder createEmptyBuilderClass(@NotNull PsiClass psiClass, @NotNull PsiMethod psiMethod, @NotNull PsiAnnotation psiAnnotation) {
         return createBuilderClass(psiClass, psiMethod,
                 psiMethod.isConstructor() || psiMethod.hasModifierProperty(PsiModifier.STATIC), psiAnnotation);
     }
 
     @NotNull
-    private LombokLightClassBuilder createEmptyBuilderClass(@NotNull PsiClass psiClass, @NotNull PsiAnnotation psiAnnotation) {
+    private OnceIOLightClassBuilder createEmptyBuilderClass(@NotNull PsiClass psiClass, @NotNull PsiAnnotation psiAnnotation) {
         return createBuilderClass(psiClass, psiClass, true, psiAnnotation);
     }
 
@@ -293,7 +293,7 @@ public class ModelHandler {
     }
 
     @NotNull
-    private LombokLightClassBuilder createBuilderClass(@NotNull PsiClass psiClass, @NotNull PsiTypeParameterListOwner psiTypeParameterListOwner, final boolean isStatic, @NotNull PsiAnnotation psiAnnotation) {
+    private OnceIOLightClassBuilder createBuilderClass(@NotNull PsiClass psiClass, @NotNull PsiTypeParameterListOwner psiTypeParameterListOwner, final boolean isStatic, @NotNull PsiAnnotation psiAnnotation) {
         PsiMethod psiMethod = null;
         if (psiTypeParameterListOwner instanceof PsiMethod) {
             psiMethod = (PsiMethod) psiTypeParameterListOwner;
@@ -302,7 +302,7 @@ public class ModelHandler {
         final String builderClassName = getBuilderClassName(psiClass, psiAnnotation, psiMethod);
         final String builderClassQualifiedName = psiClass.getQualifiedName() + "." + builderClassName;
 
-        final LombokLightClassBuilder classBuilder = new LombokLightClassBuilder(psiClass, builderClassName, builderClassQualifiedName)
+        final OnceIOLightClassBuilder classBuilder = new OnceIOLightClassBuilder(psiClass, builderClassName, builderClassQualifiedName)
                 .withContainingClass(psiClass)
                 .withNavigationElement(psiAnnotation)
                 .withParameterTypes((null != psiMethod && psiMethod.isConstructor()) ? psiClass.getTypeParameterList() : psiTypeParameterListOwner.getTypeParameterList())
@@ -319,7 +319,7 @@ public class ModelHandler {
     }
 
 
-    void addTypeParameters(@NotNull PsiClass builderClass, @Nullable PsiMethod psiMethod, @NotNull LombokLightMethodBuilder methodBuilder) {
+    void addTypeParameters(@NotNull PsiClass builderClass, @Nullable PsiMethod psiMethod, @NotNull OnceIOLightMethodBuilder methodBuilder) {
         final PsiTypeParameter[] psiTypeParameters;
         if (null == psiMethod || psiMethod.isConstructor()) {
             psiTypeParameters = builderClass.getTypeParameters();

@@ -5,14 +5,14 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.PsiImplUtil;
 import com.intellij.psi.impl.source.PsiClassReferenceType;
-import top.onceio.plugins.psi.LombokLightFieldBuilder;
-import top.onceio.plugins.util.LombokUtils;
+import top.onceio.plugins.psi.OnceIOLightFieldBuilder;
+import top.onceio.plugins.util.OnceIOUtils;
 import top.onceio.plugins.util.PsiAnnotationSearchUtil;
 import top.onceio.plugins.util.PsiClassUtil;
 import top.onceio.plugins.util.PsiTypeUtil;
 import org.jetbrains.annotations.NotNull;
 import top.onceio.core.db.annotation.Col;
-import top.onceio.plugins.processor.field.AccessorsInfo;
+import top.onceio.plugins.processor.field.OnceIOAccessorsInfo;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -68,7 +68,7 @@ public class TaleMetaInfo {
         result.fieldInitializer = psiField.getInitializer();
         result.hasBuilderDefaultAnnotation = false;
 
-        final AccessorsInfo accessorsInfo = AccessorsInfo.build(psiField);
+        final OnceIOAccessorsInfo accessorsInfo = OnceIOAccessorsInfo.build(psiField);
         result.fieldInBuilderName = accessorsInfo.removePrefix(psiField.getName());
         return result;
     }
@@ -130,7 +130,7 @@ public class TaleMetaInfo {
         }
 
         //Skip fields that start with $
-        result &= !fieldInBuilderName.startsWith(LombokUtils.LOMBOK_INTERN_FIELD_MARKER);
+        result &= !fieldInBuilderName.startsWith(OnceIOUtils.ONCEIO_INTERN_FIELD_MARKER);
 
         return result;
     }
@@ -260,7 +260,7 @@ public class TaleMetaInfo {
     Collection<PsiField> renderBuilderFields(@NotNull TaleMetaInfo info) {
         final PsiType builderFieldType = getBuilderFieldType(info.getFieldType(), info.getProject());
         return Collections.singleton(
-                new LombokLightFieldBuilder(info.getManager(), info.getFieldName(), builderFieldType)
+                new OnceIOLightFieldBuilder(info.getManager(), info.getFieldName(), builderFieldType)
                         .withContainingClass(info.getBuilderClass())
                         .withModifier(PsiModifier.PUBLIC)
                         .withNavigationElement(info.getVariable()));

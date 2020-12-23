@@ -2,7 +2,6 @@ package top.onceio.plugins.processor;
 
 
 import com.intellij.openapi.components.ServiceManager;
-import de.plushnikov.intellij.plugin.processor.Processor;
 import org.jetbrains.annotations.NotNull;
 import top.onceio.plugins.processor.clazz.model.ModelClassProcessor;
 import top.onceio.plugins.processor.clazz.model.ModelPreDefinedInnerClassFieldProcessor;
@@ -14,7 +13,7 @@ import java.util.Collection;
 
 public class OnceIOProcessorManager {
     @NotNull
-    public static Collection<Processor> getLombokProcessors() {
+    public static Collection<Processor> getOnceIOProcessors() {
         return Arrays.asList(
                 ServiceManager.getService(ModelPreDefinedInnerClassFieldProcessor.class),
                 ServiceManager.getService(ModelPreDefinedInnerClassMethodProcessor.class),

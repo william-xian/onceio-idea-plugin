@@ -10,7 +10,7 @@ import java.util.Set;
  * @author Plushnikov Michail
  */
 public class ProblemNewBuilder implements ProblemBuilder {
-  private Set<LombokProblem> problems;
+  private Set<OnceIOProblem> problems;
 
   public ProblemNewBuilder() {
     this(1);
@@ -20,7 +20,7 @@ public class ProblemNewBuilder implements ProblemBuilder {
     this.problems = new HashSet<>(size);
   }
 
-  public Set<LombokProblem> getProblems() {
+  public Set<OnceIOProblem> getProblems() {
     return problems;
   }
 
@@ -49,6 +49,6 @@ public class ProblemNewBuilder implements ProblemBuilder {
   }
 
   public void addProblem(String message, ProblemHighlightType highlightType, LocalQuickFix... quickFixes) {
-    problems.add(new LombokProblem(message, highlightType, quickFixes));
+    problems.add(new OnceIOProblem(message, highlightType, quickFixes));
   }
 }

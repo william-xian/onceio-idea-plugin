@@ -5,9 +5,9 @@ import com.intellij.codeInspection.AbstractBaseJavaLocalInspectionTool;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.psi.*;
-import top.onceio.plugins.problem.LombokProblem;
-import de.plushnikov.intellij.plugin.processor.Processor;
-import top.onceio.plugins.psi.LombokLightMethodBuilder;
+import top.onceio.plugins.problem.OnceIOProblem;
+import top.onceio.plugins.processor.Processor;
+import top.onceio.plugins.psi.OnceIOLightMethodBuilder;
 import org.jetbrains.annotations.NotNull;
 import top.onceio.plugins.provider.OnceIOProcessorProvider;
 
@@ -27,14 +27,14 @@ public class OnceIOInspection extends AbstractBaseJavaLocalInspectionTool {
     @NotNull
     @Override
     public PsiElementVisitor buildVisitor(@NotNull final ProblemsHolder holder, final boolean isOnTheFly) {
-        return new OnceIOInspection.LombokElementVisitor(holder);
+        return new OnceIOInspection.OnceIOElementVisitor(holder);
     }
 
-    private class LombokElementVisitor extends JavaElementVisitor {
+    private class OnceIOElementVisitor extends JavaElementVisitor {
 
         private final ProblemsHolder holder;
 
-        public LombokElementVisitor(ProblemsHolder holder) {
+        public OnceIOElementVisitor(ProblemsHolder holder) {
             this.holder = holder;
         }
 
@@ -53,14 +53,14 @@ public class OnceIOInspection extends AbstractBaseJavaLocalInspectionTool {
         public void visitAnnotation(PsiAnnotation annotation) {
             super.visitAnnotation(annotation);
 
-            final Collection<LombokProblem> problems = new HashSet<>();
+            final Collection<OnceIOProblem> problems = new HashSet<>();
 
             final OnceIOProcessorProvider processorProvider = OnceIOProcessorProvider.getInstance(annotation.getProject());
             for (Processor inspector : processorProvider.getProcessors(annotation)) {
                 problems.addAll(inspector.verifyAnnotation(annotation));
             }
 
-            for (LombokProblem problem : problems) {
+            for (OnceIOProblem problem : problems) {
                 holder.registerProblem(annotation, problem.getMessage(), problem.getHighlightType(), problem.getQuickFixes());
             }
         }
@@ -84,7 +84,7 @@ public class OnceIOInspection extends AbstractBaseJavaLocalInspectionTool {
                 JavaResolveResult resolveResult = results.length == 1 ? results[0] : JavaResolveResult.EMPTY;
                 PsiElement resolved = resolveResult.getElement();
 
-                if (resolved instanceof LombokLightMethodBuilder && ((LombokLightMethodBuilder) resolved).getParameterList().getParameters().length != 0) {
+                if (resolved instanceof OnceIOLightMethodBuilder && ((OnceIOLightMethodBuilder) resolved).getParameterList().getParameters().length != 0) {
                     holder.registerProblem(methodCall, "Default constructor doesn't exist", ProblemHighlightType.ERROR);
                 }
             }

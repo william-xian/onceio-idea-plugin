@@ -9,7 +9,7 @@ import com.intellij.psi.augment.PsiAugmentProvider;
 import com.intellij.psi.impl.source.PsiExtensibleClass;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
-import de.plushnikov.intellij.plugin.processor.Processor;
+import top.onceio.plugins.processor.Processor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import top.onceio.plugins.settings.ProjectSettings;
@@ -26,7 +26,7 @@ public class OnceIOAugmentProvider extends PsiAugmentProvider {
 
 
     public OnceIOAugmentProvider() {
-        log.debug("LombokAugmentProvider created");
+        log.debug("OnceIOAugmentProvider created");
     }
 
     @NotNull
@@ -56,51 +56,51 @@ public class OnceIOAugmentProvider extends PsiAugmentProvider {
         }
         // skip processing if plugin is disabled
         final Project project = element.getProject();
-        if (!ProjectSettings.isLombokEnabledInProject(project)) {
+        if (!ProjectSettings.isOnceIOEnabledInProject(project)) {
             return emptyResult;
         }
 
         final List<Psi> cachedValue;
         if (type == PsiField.class) {
-            cachedValue = CachedValuesManager.getCachedValue(element, new OnceIOAugmentProvider.FieldLombokCachedValueProvider<>(type, psiClass));
+            cachedValue = CachedValuesManager.getCachedValue(element, new OnceIOAugmentProvider.FieldOnceIOCachedValueProvider<>(type, psiClass));
         } else if (type == PsiMethod.class) {
-            cachedValue = CachedValuesManager.getCachedValue(element, new OnceIOAugmentProvider.MethodLombokCachedValueProvider<>(type, psiClass));
+            cachedValue = CachedValuesManager.getCachedValue(element, new OnceIOAugmentProvider.MethodOnceIOCachedValueProvider<>(type, psiClass));
         } else {
-            cachedValue = CachedValuesManager.getCachedValue(element, new OnceIOAugmentProvider.ClassLombokCachedValueProvider<>(type, psiClass));
+            cachedValue = CachedValuesManager.getCachedValue(element, new OnceIOAugmentProvider.ClassOnceIOCachedValueProvider<>(type, psiClass));
         }
         return null != cachedValue ? cachedValue : emptyResult;
     }
 
-    private static class FieldLombokCachedValueProvider<Psi extends PsiElement> extends OnceIOAugmentProvider.LombokCachedValueProvider<Psi> {
+    private static class FieldOnceIOCachedValueProvider<Psi extends PsiElement> extends OnceIOAugmentProvider.OnceIOCachedValueProvider<Psi> {
         private static final RecursionGuard<PsiClass> ourGuard = RecursionManager.createGuard("lombok.augment.field");
 
-        FieldLombokCachedValueProvider(Class<Psi> type, PsiClass psiClass) {
+        FieldOnceIOCachedValueProvider(Class<Psi> type, PsiClass psiClass) {
             super(type, psiClass, ourGuard);
         }
     }
 
-    private static class MethodLombokCachedValueProvider<Psi extends PsiElement> extends OnceIOAugmentProvider.LombokCachedValueProvider<Psi> {
+    private static class MethodOnceIOCachedValueProvider<Psi extends PsiElement> extends OnceIOAugmentProvider.OnceIOCachedValueProvider<Psi> {
         private static final RecursionGuard<PsiClass> ourGuard = RecursionManager.createGuard("lombok.augment.method");
 
-        MethodLombokCachedValueProvider(Class<Psi> type, PsiClass psiClass) {
+        MethodOnceIOCachedValueProvider(Class<Psi> type, PsiClass psiClass) {
             super(type, psiClass, ourGuard);
         }
     }
 
-    private static class ClassLombokCachedValueProvider<Psi extends PsiElement> extends OnceIOAugmentProvider.LombokCachedValueProvider<Psi> {
+    private static class ClassOnceIOCachedValueProvider<Psi extends PsiElement> extends OnceIOAugmentProvider.OnceIOCachedValueProvider<Psi> {
         private static final RecursionGuard<PsiClass> ourGuard = RecursionManager.createGuard("lombok.augment.class");
 
-        ClassLombokCachedValueProvider(Class<Psi> type, PsiClass psiClass) {
+        ClassOnceIOCachedValueProvider(Class<Psi> type, PsiClass psiClass) {
             super(type, psiClass, ourGuard);
         }
     }
 
-    private abstract static class LombokCachedValueProvider<Psi extends PsiElement> implements CachedValueProvider<List<Psi>> {
+    private abstract static class OnceIOCachedValueProvider<Psi extends PsiElement> implements CachedValueProvider<List<Psi>> {
         private final Class<Psi> type;
         private final PsiClass psiClass;
         private final RecursionGuard<PsiClass> recursionGuard;
 
-        LombokCachedValueProvider(Class<Psi> type, PsiClass psiClass, RecursionGuard<PsiClass> recursionGuard) {
+        OnceIOCachedValueProvider(Class<Psi> type, PsiClass psiClass, RecursionGuard<PsiClass> recursionGuard) {
             this.type = type;
             this.psiClass = psiClass;
             this.recursionGuard = recursionGuard;
@@ -125,7 +125,7 @@ public class OnceIOAugmentProvider extends PsiAugmentProvider {
     @NotNull
     private static <Psi extends PsiElement> List<Psi> getPsis(PsiClass psiClass, Class<Psi> type) {
         final List<Psi> result = new ArrayList<>();
-        final Collection<Processor> lombokProcessors = OnceIOProcessorProvider.getInstance(psiClass.getProject()).getLombokProcessors(type);
+        final Collection<Processor> lombokProcessors = OnceIOProcessorProvider.getInstance(psiClass.getProject()).getOnceIOProcessors(type);
         for (Processor processor : lombokProcessors) {
             final List<? super PsiElement> generatedElements = processor.process(psiClass);
             for (Object psiElement : generatedElements) {

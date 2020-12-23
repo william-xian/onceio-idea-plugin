@@ -17,7 +17,7 @@ import java.util.Collection;
 import java.util.regex.Pattern;
 
 public class PsiAnnotationSearchUtil {
-  private static final Key<String> LOMBOK_ANNOTATION_FQN_KEY = Key.create("LOMBOK_ANNOTATION_FQN");
+  private static final Key<String> ONCEIO_ANNOTATION_FQN_KEY = Key.create("ONCEIO_ANNOTATION_FQN");
 
   @Nullable
   public static PsiAnnotation findAnnotation(@NotNull PsiModifierListOwner psiModifierListOwner, @NotNull String annotationFQN) {
@@ -127,12 +127,12 @@ public class PsiAnnotationSearchUtil {
 
   @Nullable
   private static String getAndCacheFQN(@NotNull PsiAnnotation annotation, @Nullable String referenceName) {
-    String annotationQualifiedName = annotation.getCopyableUserData(LOMBOK_ANNOTATION_FQN_KEY);
+    String annotationQualifiedName = annotation.getCopyableUserData(ONCEIO_ANNOTATION_FQN_KEY);
     // if not cached or cache is not up to date (because existing annotation was renamed for example)
     if (null == annotationQualifiedName || (null != referenceName && !annotationQualifiedName.endsWith(".".concat(referenceName)))) {
       annotationQualifiedName = annotation.getQualifiedName();
       if (null != annotationQualifiedName && annotationQualifiedName.indexOf('.') > -1) {
-        annotation.putCopyableUserData(LOMBOK_ANNOTATION_FQN_KEY, annotationQualifiedName);
+        annotation.putCopyableUserData(ONCEIO_ANNOTATION_FQN_KEY, annotationQualifiedName);
       }
     }
     return annotationQualifiedName;

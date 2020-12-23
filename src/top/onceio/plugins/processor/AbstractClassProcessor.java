@@ -9,15 +9,14 @@ import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiModifier;
 import com.intellij.psi.util.PsiTreeUtil;
 import top.onceio.plugins.config.ConfigKey;
-import top.onceio.plugins.problem.LombokProblem;
+import top.onceio.plugins.problem.OnceIOProblem;
 import top.onceio.plugins.problem.ProblemBuilder;
 import top.onceio.plugins.problem.ProblemEmptyBuilder;
 import top.onceio.plugins.problem.ProblemNewBuilder;
-import de.plushnikov.intellij.plugin.processor.AbstractProcessor;
-import de.plushnikov.intellij.plugin.processor.clazz.constructor.AbstractConstructorClassProcessor;
-import top.onceio.plugins.psi.LombokLightClassBuilder;
+import top.onceio.plugins.processor.constructor.AbstractConstructorClassProcessor;
+import top.onceio.plugins.psi.OnceIOLightClassBuilder;
 import top.onceio.plugins.quickfix.PsiQuickFixFactory;
-import top.onceio.plugins.util.LombokUtils;
+import top.onceio.plugins.util.OnceIOUtils;
 import top.onceio.plugins.util.PsiAnnotationSearchUtil;
 import top.onceio.plugins.util.PsiAnnotationUtil;
 import top.onceio.plugins.util.PsiClassUtil;
@@ -97,8 +96,8 @@ public abstract class AbstractClassProcessor extends AbstractProcessor {
 
     @NotNull
     @Override
-    public Collection<LombokProblem> verifyAnnotation(@NotNull PsiAnnotation psiAnnotation) {
-        Collection<LombokProblem> result = Collections.emptyList();
+    public Collection<OnceIOProblem> verifyAnnotation(@NotNull PsiAnnotation psiAnnotation) {
+        Collection<OnceIOProblem> result = Collections.emptyList();
         // check first for fields, methods and filter it out, because PsiClass is parent of all annotations and will match other parents too
         @SuppressWarnings("unchecked")
         PsiElement psiElement = PsiTreeUtil.getParentOfType(psiAnnotation, PsiField.class, PsiMethod.class, PsiClass.class);
@@ -113,7 +112,7 @@ public abstract class AbstractClassProcessor extends AbstractProcessor {
 
     protected Optional<PsiClass> getSupportedParentClass(@NotNull PsiClass psiClass) {
         final PsiElement parentElement = psiClass.getParent();
-        if (parentElement instanceof PsiClass && !(parentElement instanceof LombokLightClassBuilder)) {
+        if (parentElement instanceof PsiClass && !(parentElement instanceof OnceIOLightClassBuilder)) {
             return Optional.of((PsiClass) parentElement);
         }
         return Optional.empty();
@@ -150,7 +149,7 @@ public abstract class AbstractClassProcessor extends AbstractProcessor {
                     builder.addWarning(String.format("The field '%s' does not exist", fieldName),
                             PsiQuickFixFactory.createChangeAnnotationParameterFix(psiAnnotation, "exclude", newPropertyValue));
                 } else {
-                    if (fieldName.startsWith(LombokUtils.LOMBOK_INTERN_FIELD_MARKER) || fieldByName.hasModifierProperty(PsiModifier.STATIC)) {
+                    if (fieldName.startsWith(OnceIOUtils.ONCEIO_INTERN_FIELD_MARKER) || fieldByName.hasModifierProperty(PsiModifier.STATIC)) {
                         final String newPropertyValue = calcNewPropertyValue(excludeProperty, fieldName);
                         builder.addWarning(String.format("The field '%s' would have been excluded anyway", fieldName),
                                 PsiQuickFixFactory.createChangeAnnotationParameterFix(psiAnnotation, "exclude", newPropertyValue));
@@ -170,7 +169,7 @@ public abstract class AbstractClassProcessor extends AbstractProcessor {
     }
 
     boolean shouldGenerateNoArgsConstructor(@NotNull PsiClass psiClass, @NotNull AbstractConstructorClassProcessor argsConstructorProcessor) {
-        boolean result = onceIOConfigDiscovery.getBooleanLombokConfigProperty(ConfigKey.NO_ARGS_CONSTRUCTOR_EXTRA_PRIVATE, psiClass);
+        boolean result = onceIOConfigDiscovery.getBooleanOnceIOConfigProperty(ConfigKey.NO_ARGS_CONSTRUCTOR_EXTRA_PRIVATE, psiClass);
         if (result) {
             result = !PsiClassUtil.hasSuperClass(psiClass);
         }
@@ -190,7 +189,7 @@ public abstract class AbstractClassProcessor extends AbstractProcessor {
         final boolean result;
         final Boolean declaredAnnotationValue = PsiAnnotationUtil.getDeclaredBooleanAnnotationValue(psiAnnotation, "callSuper");
         if (null == declaredAnnotationValue) {
-            final String configProperty = onceIOConfigDiscovery.getStringLombokConfigProperty(configKey, psiClass);
+            final String configProperty = onceIOConfigDiscovery.getStringOnceIOConfigProperty(configKey, psiClass);
             result = PsiClassUtil.hasSuperClass(psiClass) && "CALL".equalsIgnoreCase(configProperty);
         } else {
             result = declaredAnnotationValue;
