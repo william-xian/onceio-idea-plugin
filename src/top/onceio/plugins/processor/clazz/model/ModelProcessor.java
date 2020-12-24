@@ -25,11 +25,11 @@ public class ModelProcessor extends AbstractClassProcessor {
 
     static final String MODEL_CLASS = Model.class.getName();
 
-    private final ModelHandler builderHandler;
+    private final ModelHandler modelHandler;
 
-    public ModelProcessor(@NotNull ModelHandler builderHandler) {
+    public ModelProcessor(@NotNull ModelHandler modelHandler) {
         super(PsiMethod.class, Model.class);
-        this.builderHandler = builderHandler;
+        this.modelHandler = modelHandler;
     }
 
     @Override
@@ -52,16 +52,15 @@ public class ModelProcessor extends AbstractClassProcessor {
     }
 
     protected void generatePsiElements(@NotNull PsiClass psiClass, @NotNull PsiAnnotation psiAnnotation, @NotNull List<? super PsiElement> target) {
-        final String builderClassName = builderHandler.getBuilderClassName(psiClass, psiAnnotation, null);
+        List<PsiMethod> methods = modelHandler.createGetterSetterMethodIfNecessary(psiClass, psiAnnotation);
+        target.addAll(methods);
+
+        final String builderClassName = modelHandler.getBuilderClassName(psiClass, psiAnnotation, null);
         final PsiClass builderClass = psiClass.findInnerClassByName(builderClassName, false);
         if (null != builderClass) {
-            builderHandler.createBuilderMethodIfNecessary(psiClass, builderClass, psiAnnotation)
+            modelHandler.createBuilderMethodIfNecessary(psiClass, builderClass, psiAnnotation)
                     .ifPresent(target::add);
         }
-
-        List<PsiMethod> methods = builderHandler.createGetterSetterMethodIfNecessary(psiClass, psiAnnotation);
-
-        target.addAll(methods);
 
     }
 
