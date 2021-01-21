@@ -9,15 +9,11 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.PathUtil;
 import com.intellij.util.indexing.FileBasedIndex;
-import top.onceio.plugins.psi.OnceIOLightClassBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import top.onceio.plugins.psi.OnceIOLightClassBuilder;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 public class OnceIOConfigDiscovery {
   private final FileBasedIndex fileBasedIndex;
@@ -26,8 +22,8 @@ public class OnceIOConfigDiscovery {
     return ServiceManager.getService(OnceIOConfigDiscovery.class);
   }
 
-  public OnceIOConfigDiscovery(FileBasedIndex fileBasedIndex) {
-    this.fileBasedIndex = fileBasedIndex;
+  public OnceIOConfigDiscovery() {
+    this.fileBasedIndex = FileBasedIndex.getInstance();
   }
 
   @NotNull

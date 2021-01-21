@@ -8,7 +8,6 @@ import com.intellij.psi.PsiMethod;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import top.onceio.core.db.annotation.Model;
-import top.onceio.plugins.handler.ModelHandler;
 import top.onceio.plugins.handler.TaleMetaInfo;
 
 import java.util.ArrayList;
@@ -22,8 +21,8 @@ import java.util.List;
  */
 public class ModelPreDefinedInnerClassMethodProcessor extends AbstractModelPreDefinedInnerClassProcessor {
 
-    public ModelPreDefinedInnerClassMethodProcessor(@NotNull ModelHandler modelHandler) {
-        super(modelHandler, PsiMethod.class, Model.class);
+    public ModelPreDefinedInnerClassMethodProcessor() {
+        super(PsiMethod.class, Model.class);
     }
 
     protected Collection<? extends PsiElement> generatePsiElements(@NotNull PsiClass psiParentClass, @Nullable PsiMethod psiParentMethod, @NotNull PsiAnnotation psiAnnotation, @NotNull PsiClass psiBuilderClass) {

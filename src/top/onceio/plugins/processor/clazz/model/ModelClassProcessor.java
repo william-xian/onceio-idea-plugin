@@ -1,6 +1,7 @@
 package top.onceio.plugins.processor.clazz.model;
 
 import com.intellij.ide.util.PropertiesComponent;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
@@ -17,9 +18,9 @@ public class ModelClassProcessor extends AbstractClassProcessor {
 
     private final ModelHandler modelHandler;
 
-    public ModelClassProcessor(@NotNull ModelHandler modelHandler) {
+    public ModelClassProcessor() {
         super(PsiClass.class, Model.class);
-        this.modelHandler = modelHandler;
+        this.modelHandler = ApplicationManager.getApplication().getService(ModelHandler.class);
     }
 
     @Override

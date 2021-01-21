@@ -2,6 +2,7 @@ package top.onceio.plugins.processor.clazz.model;
 
 
 import com.intellij.ide.util.PropertiesComponent;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.psi.*;
 import org.jetbrains.annotations.NotNull;
 import top.onceio.core.db.annotation.Model;
@@ -27,9 +28,9 @@ public class ModelProcessor extends AbstractClassProcessor {
 
     private final ModelHandler modelHandler;
 
-    public ModelProcessor(@NotNull ModelHandler modelHandler) {
+    public ModelProcessor() {
         super(PsiMethod.class, Model.class);
-        this.modelHandler = modelHandler;
+        this.modelHandler = ApplicationManager.getApplication().getService(ModelHandler.class);
     }
 
     @Override

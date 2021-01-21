@@ -2,6 +2,7 @@ package top.onceio.plugins.processor.clazz.model;
 
 
 import com.intellij.ide.util.PropertiesComponent;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
@@ -24,11 +25,11 @@ public abstract class AbstractModelPreDefinedInnerClassProcessor extends Abstrac
 
     final ModelHandler modelHandler;
 
-    AbstractModelPreDefinedInnerClassProcessor(@NotNull ModelHandler modelHandler,
+    AbstractModelPreDefinedInnerClassProcessor(
                                                @NotNull Class<? extends PsiElement> supportedClass,
                                                @NotNull Class<? extends Annotation> supportedAnnotationClass) {
         super(supportedClass, supportedAnnotationClass);
-        this.modelHandler = modelHandler;
+        this.modelHandler = ApplicationManager.getApplication().getService(ModelHandler.class);;
     }
 
     @Override

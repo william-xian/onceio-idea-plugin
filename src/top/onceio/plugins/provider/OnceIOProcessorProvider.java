@@ -4,12 +4,12 @@ import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
-import top.onceio.plugins.processor.Processor;
-import top.onceio.plugins.util.PsiAnnotationSearchUtil;
-import top.onceio.plugins.util.PsiClassUtil;
 import org.jetbrains.annotations.NotNull;
 import top.onceio.core.util.Tuple2;
 import top.onceio.plugins.processor.OnceIOProcessorManager;
+import top.onceio.plugins.processor.Processor;
+import top.onceio.plugins.util.PsiAnnotationSearchUtil;
+import top.onceio.plugins.util.PsiClassUtil;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
@@ -25,22 +25,23 @@ public class OnceIOProcessorProvider {
         service.checkInitialized();
         return service;
     }
-
-    private final PropertiesComponent myPropertiesComponent;
+    private PropertiesComponent myPropertiesComponent;
 
     private final Map<Class, Collection<Processor>> onceioTypeProcessors;
     private final Map<String, Collection<Processor>> onceioProcessors;
     private final Collection<String> registeredAnnotationNames;
 
+
     private boolean alreadyInitialized;
 
-    public OnceIOProcessorProvider(@NotNull PropertiesComponent propertiesComponent) {
-        myPropertiesComponent = propertiesComponent;
-
+    public OnceIOProcessorProvider() {
+        myPropertiesComponent = PropertiesComponent.getInstance();
         onceioProcessors = new ConcurrentHashMap<>();
         onceioTypeProcessors = new ConcurrentHashMap<>();
         registeredAnnotationNames = ConcurrentHashMap.newKeySet();
     }
+
+
 
     private void checkInitialized() {
         if (!alreadyInitialized) {

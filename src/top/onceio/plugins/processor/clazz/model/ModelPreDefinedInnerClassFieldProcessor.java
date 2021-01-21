@@ -1,12 +1,14 @@
 package top.onceio.plugins.processor.clazz.model;
 
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.project.ProjectManager;
 import com.intellij.psi.*;
-import top.onceio.plugins.util.PsiClassUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import top.onceio.core.db.annotation.Model;
-import top.onceio.plugins.handler.TaleMetaInfo;
 import top.onceio.plugins.handler.ModelHandler;
+import top.onceio.plugins.handler.TaleMetaInfo;
+import top.onceio.plugins.util.PsiClassUtil;
 
 import java.util.Collection;
 import java.util.List;
@@ -19,8 +21,8 @@ import java.util.stream.Collectors;
  */
 public class ModelPreDefinedInnerClassFieldProcessor extends AbstractModelPreDefinedInnerClassProcessor {
 
-    public ModelPreDefinedInnerClassFieldProcessor(@NotNull ModelHandler modelHandler) {
-        super(modelHandler, PsiField.class, Model.class);
+    public ModelPreDefinedInnerClassFieldProcessor() {
+        super(PsiField.class, Model.class);
     }
 
     @Override
