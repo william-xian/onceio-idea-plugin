@@ -32,7 +32,7 @@ public class OnceIOProcessorProvider {
     private final Collection<String> registeredAnnotationNames;
 
 
-    private boolean alreadyInitialized;
+    private boolean alreadyInitialized = false;
 
     public OnceIOProcessorProvider() {
         myPropertiesComponent = PropertiesComponent.getInstance();

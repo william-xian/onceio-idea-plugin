@@ -9,9 +9,9 @@ import com.intellij.psi.augment.PsiAugmentProvider;
 import com.intellij.psi.impl.source.PsiExtensibleClass;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
-import top.onceio.plugins.processor.Processor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import top.onceio.plugins.processor.Processor;
 import top.onceio.plugins.settings.ProjectSettings;
 
 import java.util.*;
@@ -72,7 +72,7 @@ public class OnceIOAugmentProvider extends PsiAugmentProvider {
     }
 
     private static class FieldOnceIOCachedValueProvider<Psi extends PsiElement> extends OnceIOAugmentProvider.OnceIOCachedValueProvider<Psi> {
-        private static final RecursionGuard<PsiClass> ourGuard = RecursionManager.createGuard("onceio.augment.field");
+        private static final RecursionGuard<PsiClass> ourGuard = RecursionManager.createGuard("lombok.augment.field");
 
         FieldOnceIOCachedValueProvider(Class<Psi> type, PsiClass psiClass) {
             super(type, psiClass, ourGuard);
@@ -80,7 +80,7 @@ public class OnceIOAugmentProvider extends PsiAugmentProvider {
     }
 
     private static class MethodOnceIOCachedValueProvider<Psi extends PsiElement> extends OnceIOAugmentProvider.OnceIOCachedValueProvider<Psi> {
-        private static final RecursionGuard<PsiClass> ourGuard = RecursionManager.createGuard("onceio.augment.method");
+        private static final RecursionGuard<PsiClass> ourGuard = RecursionManager.createGuard("lombok.augment.method");
 
         MethodOnceIOCachedValueProvider(Class<Psi> type, PsiClass psiClass) {
             super(type, psiClass, ourGuard);
@@ -88,7 +88,7 @@ public class OnceIOAugmentProvider extends PsiAugmentProvider {
     }
 
     private static class ClassOnceIOCachedValueProvider<Psi extends PsiElement> extends OnceIOAugmentProvider.OnceIOCachedValueProvider<Psi> {
-        private static final RecursionGuard<PsiClass> ourGuard = RecursionManager.createGuard("onceio.augment.class");
+        private static final RecursionGuard<PsiClass> ourGuard = RecursionManager.createGuard("lombok.augment.class");
 
         ClassOnceIOCachedValueProvider(Class<Psi> type, PsiClass psiClass) {
             super(type, psiClass, ourGuard);
@@ -126,6 +126,7 @@ public class OnceIOAugmentProvider extends PsiAugmentProvider {
     private static <Psi extends PsiElement> List<Psi> getPsis(PsiClass psiClass, Class<Psi> type) {
         final List<Psi> result = new ArrayList<>();
         final Collection<Processor> onceioProcessors = OnceIOProcessorProvider.getInstance(psiClass.getProject()).getOnceIOProcessors(type);
+
         for (Processor processor : onceioProcessors) {
             final List<? super PsiElement> generatedElements = processor.process(psiClass);
             for (Object psiElement : generatedElements) {

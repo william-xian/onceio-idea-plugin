@@ -9,11 +9,11 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="top.onceio:onceio-core:0.0.9" level="project" />
+    <orderEntry type="library" name="top.onceio:onceio-core:0.1.0" level="project" />
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MAVEN_REPOSITORY$/top/onceio/onceio-core/0.0.9/onceio-core-0.0.9.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/top/onceio/onceio-core/0.1.0/onceio-core-0.1.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

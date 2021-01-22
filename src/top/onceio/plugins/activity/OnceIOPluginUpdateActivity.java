@@ -4,9 +4,9 @@ import com.intellij.notification.*;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.startup.StartupActivity;
+import org.jetbrains.annotations.NotNull;
 import top.onceio.plugins.OnceIOBundle;
 import top.onceio.plugins.Version;
-import org.jetbrains.annotations.NotNull;
 import top.onceio.plugins.settings.OnceIOSettings;
 
 public class OnceIOPluginUpdateActivity implements StartupActivity, DumbAware {
