@@ -193,6 +193,10 @@ public class ModelHandler {
             String getter = "get" + upperCap(field.getName());
             String setter = "set" + upperCap(field.getName());
 
+            if(field.getType().equals(PsiType.BOOLEAN)) {
+                getter = "is" + upperCap(field.getName());
+            }
+
             if (psiClass.findMethodsByName(getter, false).length == 0) {
                 final String blockText = String.format("return this.%s;", field.getName());
                 final OnceIOLightMethodBuilder methodBuilder = new OnceIOLightMethodBuilder(psiClass.getManager(), getter)
