@@ -54,12 +54,8 @@ public class ModelProcessor extends AbstractClassProcessor {
 
     protected void generatePsiElements(@NotNull PsiClass psiClass, @NotNull PsiAnnotation psiAnnotation, @NotNull List<? super PsiElement> target) {
 
-        PsiMethod[] psiMethods = psiClass.findMethodsByName("meta", true);
-
-        if(psiMethods.length == 0) {
-            List<PsiMethod> methods = modelHandler.createGetterSetterMethodIfNecessary(psiClass, psiAnnotation);
-            target.addAll(methods);
-        }
+        List<PsiMethod> methods = modelHandler.createGetterSetterMethodIfNecessary(psiClass, psiAnnotation);
+        target.addAll(methods);
 
         final String builderClassName = modelHandler.getBuilderClassName(psiClass, psiAnnotation, null);
         final PsiClass builderClass = psiClass.findInnerClassByName(builderClassName, false);
